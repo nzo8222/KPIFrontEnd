@@ -1,0 +1,54 @@
+<div class="row">
+  <div class="col-lg-6">
+
+    <!-- <ul class="list-group">
+      <li *ngFor="let prod of productos" class="list-group-item">{{prod.precio}} - {{prod.descripcion}}</li>
+    </ul> -->
+
+
+    <form [formGroup]="form" (submit)="onSubmitPedidoCliente()" role="form">
+      <!-- <fieldset class="form-group">
+        <label>Descripción</label>
+        <input formControlName="descripcion" class="form-control" />formControlName="cantidad" class="form-control"
+        <p class="help-block">Agrega la descripción del producto</p>
+      </fieldset> -->
+      
+      <div>
+        <p>Escriba el código de producto.</p>
+        <kendo-autocomplete 
+        (valueChange)="onDropDownItemSelected($event)" 
+        [data]="lstProductosContpaq"
+        [placeholder]="'Seleccione el código de producto'" 
+        [valueField]="'codigoProducto'">
+        </kendo-autocomplete>
+        <fieldset class="form-group">
+          <label>Cantidad</label>
+          <input  />
+        </fieldset>
+      </div>
+
+      <kendo-grid [data]="listaGridProductos" [height]="410">
+        <kendo-grid-column field="codigoProducto" title="Codigo" width="100">
+        </kendo-grid-column>
+        <kendo-grid-column field="nombreProducto" title="Nombre" width="250">
+        </kendo-grid-column>
+        <kendo-grid-column field="razonSocial" title="Razon social">
+        </kendo-grid-column>
+      </kendo-grid>
+
+
+      <div class="example-wrapper" style="min-height: 400px">
+        <p>Fecha de Entrega:</p>
+        <kendo-datepicker formControlName="fechaEntrega">
+        </kendo-datepicker>
+      </div>
+      <!-- <fieldset class="form-group">
+        <label>Precio</label>
+        <input formControlName="precio" class="form-control" />
+        <p class="help-block">Agrega el precio del producto.</p>
+      </fieldset> -->
+
+      <button type="submit" class="btn btn-secondary">Guardar pedido</button>
+    </form>
+  </div>
+</div>
