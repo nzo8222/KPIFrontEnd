@@ -1,54 +1,72 @@
 <div class="row">
-  <div class="col-lg-6">
+  <div class="col-lg-8">
 
-    <!-- <ul class="list-group">
-      <li *ngFor="let prod of productos" class="list-group-item">{{prod.precio}} - {{prod.descripcion}}</li>
-    </ul> -->
-
-
-    <form [formGroup]="form" (submit)="onSubmitPedidoCliente()" role="form">
-      <!-- <fieldset class="form-group">
-        <label>Descripción</label>
-        <input formControlName="descripcion" class="form-control" />formControlName="cantidad" class="form-control"
-        <p class="help-block">Agrega la descripción del producto</p>
-      </fieldset> -->
-      
-      <div>
-        <p>Escriba el código de producto.</p>
-        <kendo-autocomplete 
-        (valueChange)="onDropDownItemSelected($event)" 
-        [data]="lstProductosContpaq"
-        [placeholder]="'Seleccione el código de producto'" 
-        [valueField]="'codigoProducto'">
-        </kendo-autocomplete>
-        <fieldset class="form-group">
-          <label>Cantidad</label>
-          <input  />
-        </fieldset>
-      </div>
+      <form (ngSubmit)="onDropDownItemSelected()" #formaProductos="ngForm">
+        <div class="form-group">
+            <p>Escriba el código de producto.</p>
+            <kendo-autocomplete 
+             id="codigo"
+             name="codigo"
+             
+            [data]="lstProductosContpaq"
+            [placeholder]="'Seleccione el código de producto'" 
+            [valueField]="'codigoProducto'"
+            ngModel
+            aria-required="Introdusca el codigo del producto">
+            </kendo-autocomplete>
+            <p>Escriba número de piezas</p>
+            <input 
+             type="number" 
+             id="cantidad"
+             name="cantidad"
+             ngModel
+             required
+             class="form-control"
+             >
+             <button 
+             class="btn btn-primary"
+             type="submit"
+             [disabled]="!formaProductos.valid">Agregar Producto</button>
+        </div>
+      </form>
 
       <kendo-grid [data]="listaGridProductos" [height]="410">
         <kendo-grid-column field="codigoProducto" title="Codigo" width="100">
         </kendo-grid-column>
         <kendo-grid-column field="nombreProducto" title="Nombre" width="250">
         </kendo-grid-column>
-        <kendo-grid-column field="razonSocial" title="Razon social">
+        <kendo-grid-column field="razonSocial" title="Razon social"width="250">
         </kendo-grid-column>
+        <kendo-grid-column field="cantidadPiezas" title="Cantidad"width="150">
+          </kendo-grid-column>
       </kendo-grid>
 
-
+<!-- 
       <div class="example-wrapper" style="min-height: 400px">
         <p>Fecha de Entrega:</p>
         <kendo-datepicker formControlName="fechaEntrega">
         </kendo-datepicker>
-      </div>
+      </div> -->
       <!-- <fieldset class="form-group">
         <label>Precio</label>
         <input formControlName="precio" class="form-control" />
         <p class="help-block">Agrega el precio del producto.</p>
       </fieldset> -->
-
-      <button type="submit" class="btn btn-secondary">Guardar pedido</button>
-    </form>
+      <form (ngSubmit)="onSubmitPedidoCliente()" #formaPedidos="ngForm">
+          <div class="form-control">
+              <p>Fecha de Entrega:</p>
+              <kendo-datepicker 
+        id="fechaPedido"
+        name="fechaPedido"
+        ngModel
+        required>
+        </kendo-datepicker>
+        <button 
+        class="btn btn-primary"
+        type="submit"
+        [disabled]="!formaPedidos.valid">Agregar Pedido</button>
+            </div>
+      </form>
+    
   </div>
 </div>
