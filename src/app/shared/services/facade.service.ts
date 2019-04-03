@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import { Producto } from '../interfaces/entities';
-import { productoCompaq, pedidoCliente } from '../interfaces/models';
+import { productoCompaq, pedidoCliente, movimientoAlmacen } from '../interfaces/models';
 import { RespuestaServidor } from '../interfaces/response';
 
 class HttpRequestUtil {
@@ -101,8 +101,8 @@ export class FacadeService {
   }
 
   // AddOrEdit producto
-  public AddOrEditProducto(producto: Producto): Observable<Producto> {
-    return this.request.doPost<Producto>(`Producto`, producto);
+  public PostMovimientoAlmacen(movimeintoAlmacen: movimientoAlmacen): Observable<movimientoAlmacen> {
+    return this.request.doPost<movimientoAlmacen>(`Producto`, movimeintoAlmacen);
   }
 
   public GetProductosContpaq(): Observable<productoCompaq[]>{

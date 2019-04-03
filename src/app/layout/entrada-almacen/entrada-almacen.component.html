@@ -1,3 +1,58 @@
-<p>
-  entrada-almacen works!
-</p>
+<div class="row">
+    <div class="col-lg-8">
+      <form [formGroup]="formaAlmacen" (ngSubmit)="onSubmit()">
+        <div class="form-group" >
+          <label for="CodigoProducto">Codigo Poducto</label>
+          <input type="text"
+          id="codigoProducto"
+          class="form-control"
+          formControlName="codigoProducto">
+          <span 
+          *ngIf="!formaAlmacen.get('codigoProducto').valid && formaAlmacen.get('codigoProducto').touched"
+          class="help-block">Ingresa un codigo valido</span>
+        </div>
+        <div class="form-group">
+          <label for="nombreProducto">Nombre del producto</label>
+          <input type="text"
+          id="nombreProducto"
+          class="form-control"
+          formControlName="nombreProducto">
+          <span 
+          *ngIf="!formaAlmacen.get('nombreProducto').valid && formaAlmacen.get('nombreProducto').touched"
+          class="help-block">Ingresa un nombre valido</span>
+        </div>
+        <div class="form-group" *ngFor="let tipo of tiposMovimientos">
+          <label for="tipoMovimiento">
+            <input type="radio"
+            [value]="tipo"
+            id="tipoMovimiento"
+            formControlName="tipoMovimiento">{{tipo}}
+          </label>
+        </div>
+        <div class="form-group">
+          <label for="numeroBolsas">Número de Bolsas</label>
+          <input type="text"
+          id="numeroBolsas"
+          formControlName="numeroBolsas">
+          <span 
+          *ngIf="!formaAlmacen.get('numeroBolsas').valid && formaAlmacen.get('numeroBolsas').touched"
+          class="help-block">Ingresa un número valido</span>
+        </div>
+        <!-- <div class="form-group">
+          <label for="fechaMovimiento"></label>
+        </div> -->
+        <div class="form-group" *ngFor="let turno of turnos">
+          <label for="turno">Turno {{turno}}
+          <input type="radio"
+          id="turno"
+          [value]="turno"
+          formControlName="turno"> </label>
+        </div>
+        <span 
+        *ngIf="!formaAlmacen.valid && formaAlmacen.touched"
+        class="help-block">Ingresa informacion valida</span>
+        <button class="btn btn-primary" type="submit"
+        [disabled]="!formaAlmacen.valid">Guardar Movimiento</button>
+      </form>
+    </div>
+  </div>

@@ -1,8 +1,9 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FacadeService } from 'src/app/shared/services/facade.service';
 import { Producto } from 'src/app/shared/interfaces/entities';
-import { FormBuilder, Validators, FormGroup, NgForm, FormsModule  } from '@angular/forms';
+import { FormBuilder, Validators, FormGroup, NgForm, FormsModule } from '@angular/forms';
 import { productoCompaq, pedidoCliente } from 'src/app/shared/interfaces/models';
+import { State } from '@progress/kendo-data-query';
 
 @Component({
   selector: 'app-blank-page',
@@ -10,7 +11,21 @@ import { productoCompaq, pedidoCliente } from 'src/app/shared/interfaces/models'
   styleUrls: ['./blank-page.component.scss']
 })
 export class BlankPageComponent implements OnInit {
-   private producto: productoCompaq;
+
+  // Constantes KendoGrid
+  public gridState: State = {
+    sort: [],
+    skip: 0,
+    take: 10
+  };
+  public formGroup: FormGroup;
+
+  public selectedKeys: string[] = [];
+
+  public idxSelectedItem: number;
+
+
+  private producto: productoCompaq;
   public form: FormGroup;
   // private productos: Producto[];
   public listaGridProductos: productoCompaq[] = [];
@@ -28,12 +43,12 @@ export class BlankPageComponent implements OnInit {
   }
   //producto: string
   onDropDownItemSelected() {
-    
+
     let codigoProducto = this.pedidoClienteForm.value.codigo;
-    let cantidadPiezas = this.pedidoClienteForm.value.cantidad;
-    let selectedItem ;
+    let cantidadBolsas = this.pedidoClienteForm.value.cantidad;
+    let selectedItem;
     selectedItem = this.lstProductosContpaq.find(p => p.codigoProducto === codigoProducto);
-    selectedItem.cantidadPiezas = cantidadPiezas;
+    selectedItem.cantidadBolsas = cantidadBolsas;
     this.listaGridProductos.push(selectedItem);
     this.pedidoClienteForm.reset();
   }
@@ -47,14 +62,36 @@ export class BlankPageComponent implements OnInit {
     });
   }
 
+
+  selectedKeysChange(value: any) {
+    const idx = this.listaGridProductos.findIndex(e => e.codigoProducto === this.selectedKeys[0]);
+
+    if (idx) { this.idxSelectedItem = idx; }
+  }
+  onProductoEdit() {
+    // Actualiza los valores.
+    if (this.idxSelectedItem) {
+      this.listaGridProductos[this.idxSelectedItem].cantidadBolsas = this.pedidoClienteForm.value.cantidadPiezas;
+      this.listaGridProductos[this.idxSelectedItem].codigoProducto = this.pedidoClienteForm.value.codigo;
+    } else {
+      console.log('Debe seleccionar un elemento');
+    }
+  }
+
+  onProductoDelete() {
+
+  }
+
   onSubmitPedidoCliente() {
     // Aquí comienza la lógica para el guardado.
 
     // if (!this.form.valid) { return; }
 
     // const pedidoCliente = this.form.value as pedidoCliente;
-    let pedidoCliente = { productosContpaq: null,
-      fechaEntrega: null};
+    let pedidoCliente = {
+      productosContpaq: null,
+      fechaEntrega: null
+    };
     pedidoCliente.fechaEntrega = new Date();
     pedidoCliente.productosContpaq = [];
     let fechaPedido = this.guardarClienteForm.value.fechaPedido
@@ -70,4 +107,5 @@ export class BlankPageComponent implements OnInit {
     this.listaGridProductos = [];
     this.guardarClienteForm.reset();
   }
+
 }
