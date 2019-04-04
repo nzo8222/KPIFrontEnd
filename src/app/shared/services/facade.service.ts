@@ -90,9 +90,9 @@ export class FacadeService {
 //  public GetProducto(idProducto: string): Observable<Producto> {
 //   return this.request.doGet<Producto>(`Producto/${idProducto}`);
 // }
-  // Get producto
-  public GetProductos(): Observable<Producto[]> {
-    return this.request.doGet<Producto[]>(`Producto`);
+  // Get Pedidos con sus productos
+  public GetPedidosProductos(): Observable<pedidoCliente[]> {
+    return this.request.doGet<pedidoCliente[]>(`Producto/GetPedidosProducto`);
   }
 
   // Delte producto
@@ -101,8 +101,8 @@ export class FacadeService {
   }
 
   // AddOrEdit producto
-  public PostMovimientoAlmacen(movimeintoAlmacen: movimientoAlmacen): Observable<movimientoAlmacen> {
-    return this.request.doPost<movimientoAlmacen>(`Producto`, movimeintoAlmacen);
+  public PostMovimientoAlmacen(movimeintoAlmacen: movimientoAlmacen): Observable<RespuestaServidor> {
+    return this.request.doPost<RespuestaServidor>(`Producto`, movimeintoAlmacen);
   }
 
   public GetProductosContpaq(): Observable<productoCompaq[]>{

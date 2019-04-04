@@ -18,9 +18,11 @@ import {
     TabsComponent,
     RatingComponent,
     TooltipComponent,
-    TimepickerComponent
+    TimepickerComponent,
+    
 } from './components';
 import { PageHeaderModule } from '../../shared';
+import { GridModule } from '@progress/kendo-angular-grid';
 
 @NgModule({
     imports: [
@@ -29,7 +31,8 @@ import { PageHeaderModule } from '../../shared';
         FormsModule,
         ReactiveFormsModule,
         NgbModule,
-        PageHeaderModule
+        PageHeaderModule,
+        GridModule
     ],
     declarations: [
         BsComponentComponent,

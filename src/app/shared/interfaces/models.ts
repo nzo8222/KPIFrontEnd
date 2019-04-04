@@ -13,7 +13,7 @@ export interface pedidoCliente{
 
 export interface movimientoAlmacen {
     
-        IdMovimientoAlmacen: string;
+        // IdMovimientoAlmacen: string;
         CodigoProducto: string;
         NombreProducto:string;
         TipoMovimiento:string;
