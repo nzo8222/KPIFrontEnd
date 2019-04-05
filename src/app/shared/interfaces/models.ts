@@ -3,7 +3,9 @@ export interface productoCompaq{
     nombreProducto: string;
     razonSocial: string;
     cantidadBolsas: string;
-    
+    cumplimiento: number;
+    devoluciones: number;
+   
 }
 
 export interface pedidoCliente{
@@ -20,5 +22,5 @@ export interface movimientoAlmacen {
         NumBolsas: string;
         FechaMovimiento: Date;
         Turno:string;
-     
+        FolioRemision: string;
 }

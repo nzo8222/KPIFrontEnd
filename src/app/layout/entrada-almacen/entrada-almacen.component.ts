@@ -19,7 +19,8 @@ export class EntradaAlmacenComponent implements OnInit {
       'nombreProducto': new FormControl(null, [Validators.required, Validators.minLength(5)]),
       'tipoMovimiento': new FormControl('Entrada', Validators.required),
       'numeroBolsas': new FormControl(null, [Validators.required, Validators.pattern('^[0-9]*$')]),
-      'turno': new FormControl('1', Validators.required)
+      'turno': new FormControl('1', Validators.required),
+      'folioRemision': new FormControl(null, Validators.pattern('^[0-9]*$'))
     });
   }
   onSubmit() {
@@ -30,13 +31,17 @@ export class EntradaAlmacenComponent implements OnInit {
         TipoMovimiento: null,
         NumBolsas: null,
         FechaMovimiento: null,
-        Turno: null
+        Turno: null,
+        FolioRemision: null
       }
       movimientoAlmacen.CodigoProducto = this.formaAlmacen.value.codigoProducto;
       movimientoAlmacen.NombreProducto = this.formaAlmacen.value.nombreProducto;
       movimientoAlmacen.TipoMovimiento = this.formaAlmacen.value.tipoMovimiento;
       movimientoAlmacen.NumBolsas = this.formaAlmacen.value.numeroBolsas;
       movimientoAlmacen.Turno = this.formaAlmacen.value.turno;
+      if(this.formaAlmacen.value.tipoMovimiento==="Salida"){
+        movimientoAlmacen.FolioRemision = this.formaAlmacen.value.folioRemision;
+      }
       this.facadeService.PostMovimientoAlmacen(movimientoAlmacen).subscribe(RespuestaServidor => {
         if(RespuestaServidor.exitoso) { console.log("funka la wea" )} else {
           console.log(`Tronó esta madre ${RespuestaServidor.mensajeError}`);

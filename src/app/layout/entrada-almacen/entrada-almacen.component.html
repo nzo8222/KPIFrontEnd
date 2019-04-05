@@ -29,6 +29,13 @@
             formControlName="tipoMovimiento">{{tipo}}
           </label>
         </div>
+        <div class="form-group" *ngIf="formaAlmacen.value.tipoMovimiento==='Salida'">
+          <label for="folioRemision">Folio Remision</label>
+            <input type="text"
+            id="folioRemision"
+            formControlName="folioRemision">
+          
+        </div>
         <div class="form-group">
           <label for="numeroBolsas">Número de Bolsas</label>
           <input type="text"

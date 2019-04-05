@@ -33,6 +33,48 @@
       </kendo-grid-column>
       <kendo-grid-column field="cantidadBolsas" title="Cantidad Bolsas" width="150">
       </kendo-grid-column>
+      (click)="onSelect(pedido)"
+      [class.selected]="hero === selectedHero"
     </kendo-grid> -->
-    {{listaGridPedidos}}
+    <ul class="heroes">
+      <li *ngFor="let pedido of listaGridPedidos"
+      (click)="onSelect(pedido)">
+        <span class="badge">{{pedido.fechaEntrega}}</span>
+        
+      </li>
+    </ul>
+    <div *ngIf="pedidoSeleccionado">
+
+      <h2>{{pedidoSeleccionado.fechaEntrega | uppercase}} Detalles</h2>
+      
+      <div>
+        
+        <ul class="heroes">
+          <li *ngFor="let producto of listaProducto"
+          >
+            <span class="badge">{{producto.codigoProducto}}</span> 
+            {{producto.nombreProducto}}
+            <span class="badge">{{producto.razonSocial}}</span>
+            {{producto.cantidadBolsas}}
+            <form [formGroup]="formaProducto" (ngSubmit)="onSubmit()">
+              <div class="form-group" >
+                <label for="devolucionesProducto">Devoluciones producto</label>
+                <input type="text"
+                id="devolucionesProducto"
+                class="form-control"
+                formControlName="devolucionesProducto">
+                <span 
+                *ngIf="!formaProducto.get('devolucionesProducto').valid && formaProducto.get('devolucionesProducto').touched"
+                class="help-block">Solo se pueden ingresar números</span>
+                <button class="btn btn-primary" type="submit"
+        [disabled]="!formaProducto.valid">Guardar Devoluciones</button>
+              </div>
+            </form>
+          </li>
+        </ul>
+
+      </div>
+    
+    </div>
+    
 </div>
