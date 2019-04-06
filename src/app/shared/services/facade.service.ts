@@ -6,6 +6,7 @@ import { environment } from '../../../environments/environment';
 import { Producto } from '../interfaces/entities';
 import { productoCompaq, pedidoCliente, movimientoAlmacen } from '../interfaces/models';
 import { RespuestaServidor } from '../interfaces/response';
+import { pedidoClienteDTO, productoCompaqDTO } from '../interfaces/DTOs';
 
 class HttpRequestUtil {
   constructor(private http: HttpClient, public urlService: string) {}
@@ -86,13 +87,16 @@ export class FacadeService {
   public PostPedidoCliente(pedidoCliente: pedidoCliente): Observable<RespuestaServidor>{
     return this.request.doPost<RespuestaServidor>(`PedidoCliente`, pedidoCliente);
   }
+  public PutProductoPedido(productoCompaqDTO: productoCompaqDTO): Observable<RespuestaServidor>{
+    return this.request.doPost<RespuestaServidor>(`Producto/PutProductoPedido`, productoCompaqDTO);
+  }
 //  // Get producto
 //  public GetProducto(idProducto: string): Observable<Producto> {
 //   return this.request.doGet<Producto>(`Producto/${idProducto}`);
 // }
   // Get Pedidos con sus productos
-  public GetPedidosProductos(): Observable<pedidoCliente[]> {
-    return this.request.doGet<pedidoCliente[]>(`Producto/GetPedidosProducto`);
+  public GetPedidosProductos(): Observable<pedidoClienteDTO[]> {
+    return this.request.doGet<pedidoClienteDTO[]>(`Producto/GetPedidosProducto`);
   }
 
   // Delte producto

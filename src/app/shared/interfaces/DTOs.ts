@@ -1,5 +1,5 @@
 export interface productoCompaqDTO{
-    IdProductoInventario: string;
+    idProductoInventario: string;
     codigoProducto: string;
     nombreProducto: string;
     razonSocial: string;
@@ -7,4 +7,10 @@ export interface productoCompaqDTO{
     cumplimiento: number;
     devoluciones: number;
    
+}
+
+export interface pedidoClienteDTO{
+    fechaRegistro: Date;
+    productosContpaq: productoCompaqDTO[];
+    fechaEntrega: Date;
 }

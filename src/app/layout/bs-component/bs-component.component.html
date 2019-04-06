@@ -39,8 +39,8 @@
     <ul class="heroes">
       <li *ngFor="let pedido of listaGridPedidos"
       (click)="onSelect(pedido)">
-        <span class="badge">{{pedido.fechaEntrega}}</span>
-        
+        <span class="badge">Fecha Registro: {{pedido.fechaRegistro}}</span>
+        Fecha Entrega: {{pedido.fechaEntrega}} Codigo Producto: {{pedido.productosContpaq[0].codigoProducto}}
       </li>
     </ul>
     <div *ngIf="pedidoSeleccionado">
@@ -56,7 +56,7 @@
             {{producto.nombreProducto}}
             <span class="badge">{{producto.razonSocial}}</span>
             {{producto.cantidadBolsas}}
-            <form [formGroup]="formaProducto" (ngSubmit)="onSubmit()">
+            <form [formGroup]="formaProducto" (ngSubmit)="onSubmit(producto)">
               <div class="form-group" >
                 <label for="devolucionesProducto">Devoluciones producto</label>
                 <input type="text"
