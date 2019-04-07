@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { routerTransition } from '../../router.animations';
+import { FacadeService } from 'src/app/shared/services/facade.service';
+import { SolicitudFechas } from 'src/app/shared/interfaces/models';
 
 @Component({
     selector: 'app-charts',
@@ -9,6 +11,10 @@ import { routerTransition } from '../../router.animations';
 })
 export class ChartsComponent implements OnInit {
     // bar chart
+
+
+    // CreationFlags
+    public loadedChart: boolean;
     public barChartOptions: any = {
         scaleShowVerticalLines: false,
         responsive: true
@@ -78,11 +84,14 @@ export class ChartsComponent implements OnInit {
     public polarAreaChartType: string;
 
     // lineChart
-    public lineChartData: Array<any> = [
-        { data: [65, 59, 80, 81, 56, 55, 40], label: 'Series A' },
-        { data: [28, 48, 40, 19, 86, 27, 90], label: 'Series B' },
-        { data: [18, 48, 77, 9, 100, 27, 40], label: 'Series C' }
-    ];
+    // public lineChartData: Array<any> = [
+    //     { data: [65, 59, 80, 81, 56, 55, 40], label: 'Series A' },
+    //     { data: [28, 48, 40, 19, 86, 27, 90], label: 'Series B' },
+    //     { data: [18, 48, 77, 9, 100, 27, 40], label: 'Series C' }
+    // ];
+
+    public lineChartData: any[] = [];
+
     public lineChartLabels: Array<any> = [
         'January',
         'February',
@@ -158,7 +167,7 @@ export class ChartsComponent implements OnInit {
          */
     }
 
-    constructor() {}
+    constructor(private servicio: FacadeService) { }
 
     ngOnInit() {
         this.barChartType = 'bar';
@@ -170,5 +179,25 @@ export class ChartsComponent implements OnInit {
         this.polarAreaChartType = 'polarArea';
         this.lineChartLegend = true;
         this.lineChartType = 'line';
+
+        var solicitudFecha = new SolicitudFechas();
+
+        solicitudFecha.FechaF = new Date(2019, 3, 10);
+        solicitudFecha.FechaI = new Date(2019, 3, 1);
+
+        this.servicio.PostDatosGraficaCumplimientoProducto(solicitudFecha).subscribe(res => {
+            // Rellena eje Y con información (ChartLabelData).
+            res.forEach(c => {
+                this.lineChartData.push({
+                    data: c.cumplimientos,
+                    label: c.nombreProducto
+                })
+            });
+
+            // TODO: Preguntar qué va en eje X (ChartLabel)
+
+            this.loadedChart = true;
+        });
+
     }
 }

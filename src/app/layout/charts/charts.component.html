@@ -52,7 +52,7 @@
         </div>
     </div>
     <div class="row">
-        <div class="col col-sm-6">
+        <!-- <div class="col col-sm-6">
             <div class="card mb-3">
                 <div class="card-header">
                     Polar Area Chart
@@ -62,8 +62,8 @@
                     </canvas>
                 </div>
             </div>
-        </div>
-        <div class="col col-sm-6">
+        </div> -->
+        <div *ngIf="loadedChart" class="col">
             <div class="card mb-3">
                 <div class="card-header">
                     Line Chart

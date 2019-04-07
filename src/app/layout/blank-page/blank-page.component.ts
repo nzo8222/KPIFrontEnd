@@ -64,22 +64,33 @@ export class BlankPageComponent implements OnInit {
 
 
   selectedKeysChange(value: any) {
-    const idx = this.listaGridProductos.findIndex(e => e.codigoProducto === this.selectedKeys[0]);
 
-    if (idx) { this.idxSelectedItem = idx; }
   }
   onProductoEdit() {
+    // Obtiene el indice seleccionado.
+    const idx = this.listaGridProductos.findIndex(e => e.codigoProducto === this.selectedKeys[0]);
+
+    if (idx > -1) { this.idxSelectedItem = idx; }
+
     // Actualiza los valores.
-    if (this.idxSelectedItem) {
-      this.listaGridProductos[this.idxSelectedItem].cantidadBolsas = this.pedidoClienteForm.value.cantidadPiezas;
-      this.listaGridProductos[this.idxSelectedItem].codigoProducto = this.pedidoClienteForm.value.codigo;
+    if (this.idxSelectedItem > -1) {
+      this.listaGridProductos[this.idxSelectedItem].cantidadBolsas = this.pedidoClienteForm.value.cantidad;
+      // this.listaGridProductos[this.idxSelectedItem].codigoProducto = this.pedidoClienteForm.value.codigo;
     } else {
       console.log('Debe seleccionar un elemento');
     }
   }
 
   onProductoDelete() {
+    const idx = this.listaGridProductos.findIndex(e => e.codigoProducto === this.selectedKeys[0]);
 
+    if (idx > -1) { this.idxSelectedItem = idx; }
+    if (this.idxSelectedItem > -1) {
+      this.listaGridProductos.splice(this.idxSelectedItem, 1);
+      // this.listaGridProductos[this.idxSelectedItem].codigoProducto = this.pedidoClienteForm.value.codigo;
+    } else {
+      console.log('Debe seleccionar un elemento');
+    }
   }
 
   onSubmitPedidoCliente() {

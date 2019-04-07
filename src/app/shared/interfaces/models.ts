@@ -24,3 +24,13 @@ export interface movimientoAlmacen {
         Turno:string;
         FolioRemision: string;
 }
+
+export class SolicitudFechas {
+    public FechaI: Date;
+    public FechaF: Date;
+}
+
+export interface DatosGraficaCumplimiento {
+    nombreProducto: String;
+    cumplimientos: number[];
+}

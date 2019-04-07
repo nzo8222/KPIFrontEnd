@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import { Producto } from '../interfaces/entities';
-import { productoCompaq, pedidoCliente, movimientoAlmacen } from '../interfaces/models';
+import { productoCompaq, pedidoCliente, movimientoAlmacen, SolicitudFechas, DatosGraficaCumplimiento } from '../interfaces/models';
 import { RespuestaServidor } from '../interfaces/response';
 import { pedidoClienteDTO, productoCompaqDTO } from '../interfaces/DTOs';
 
@@ -90,10 +90,10 @@ export class FacadeService {
   public PutProductoPedido(productoCompaqDTO: productoCompaqDTO): Observable<RespuestaServidor>{
     return this.request.doPost<RespuestaServidor>(`Producto/PutProductoPedido`, productoCompaqDTO);
   }
-//  // Get producto
-//  public GetProducto(idProducto: string): Observable<Producto> {
-//   return this.request.doGet<Producto>(`Producto/${idProducto}`);
-// }
+  // Get producto
+  public PostDatosGraficaCumplimientoProducto(periodo: SolicitudFechas): Observable<DatosGraficaCumplimiento[]> {
+    return this.request.doPost<DatosGraficaCumplimiento[]>(`PedidoCliente/GetGraficaCumplimiento`, periodo);
+  }
   // Get Pedidos con sus productos
   public GetPedidosProductos(): Observable<pedidoClienteDTO[]> {
     return this.request.doGet<pedidoClienteDTO[]>(`PedidoCliente/GetPedidosProducto`);
