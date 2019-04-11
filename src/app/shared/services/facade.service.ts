@@ -6,7 +6,7 @@ import { environment } from '../../../environments/environment';
 import { Producto } from '../interfaces/entities';
 import { productoCompaq, pedidoCliente, movimientoAlmacen, SolicitudFechas, DatosGraficaCumplimiento } from '../interfaces/models';
 import { RespuestaServidor } from '../interfaces/response';
-import { pedidoClienteDTO, productoCompaqDTO } from '../interfaces/DTOs';
+import { pedidoClienteDTO, productoCompaqDTO, DatosInventarioFisicoDTO, productoPedidoKPI } from '../interfaces/DTOs';
 
 class HttpRequestUtil {
   constructor(private http: HttpClient, public urlService: string) {}
@@ -84,6 +84,10 @@ export class FacadeService {
     const urlService = environment.API_URL;
     this.request = new HttpRequestUtil(http, urlService);
   }
+  //Post Inventario Fisico
+  public PostInventarioFisico(inventarioFisico: DatosInventarioFisicoDTO): Observable<RespuestaServidor>{
+    return this.request.doPost<RespuestaServidor>(`InventarioFisico/PostInventarioFisico`, inventarioFisico);
+  }
   public PostPedidoCliente(pedidoCliente: pedidoCliente): Observable<RespuestaServidor>{
     return this.request.doPost<RespuestaServidor>(`PedidoCliente`, pedidoCliente);
   }
@@ -95,8 +99,8 @@ export class FacadeService {
     return this.request.doPost<DatosGraficaCumplimiento[]>(`PedidoCliente/GetGraficaCumplimiento`, periodo);
   }
   // Get Pedidos con sus productos
-  public GetPedidosProductos(): Observable<pedidoClienteDTO[]> {
-    return this.request.doGet<pedidoClienteDTO[]>(`PedidoCliente/GetPedidosProducto`);
+  public GetPedidosProductos(): Observable<productoPedidoKPI[]> {
+    return this.request.doGet<productoPedidoKPI[]>(`PedidoCliente/GetPedidosProducto`);
   }
 
   // // Delte producto
@@ -108,7 +112,8 @@ export class FacadeService {
   public PostMovimientoAlmacen(movimeintoAlmacen: movimientoAlmacen): Observable<RespuestaServidor> {
     return this.request.doPost<RespuestaServidor>(`MovimientoAlmacen/PostMovimiento`, movimeintoAlmacen);
   }
-
+  //se cambio el tipo de objeto que recibe a productoCompaq sin [] porque se perdio la vista que regresaba
+  //el arreglo de productos
   public GetProductosContpaq(): Observable<productoCompaq[]>{
     return this.request.doGet<productoCompaq[]>(`Producto/GetContpaqProducts`);
   }

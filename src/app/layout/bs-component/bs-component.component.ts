@@ -3,7 +3,7 @@ import { FacadeService } from 'src/app/shared/services/facade.service';
 import { productoCompaq } from 'src/app/shared/interfaces/models';
 import { State } from '@progress/kendo-data-query';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { pedidoClienteDTO, productoCompaqDTO } from 'src/app/shared/interfaces/DTOs';
+import { pedidoClienteDTO, productoCompaqDTO, productoPedidoKPI } from 'src/app/shared/interfaces/DTOs';
 import { SelectableSettings, GridDataResult } from '@progress/kendo-angular-grid';
 
 @Component({
@@ -12,10 +12,18 @@ import { SelectableSettings, GridDataResult } from '@progress/kendo-angular-grid
     styleUrls: ['./bs-component.component.scss']
 })
 export class BsComponentComponent implements OnInit {
+    public gridState: State = {
+        sort: [],
+        skip: 0,
+        take: 10
+      };
     constructor(private facadeService: FacadeService) { }
-    public listaGridPedidos: pedidoClienteDTO[] = [];
+    public listaGridPedidos: productoPedidoKPI[] = [];
     public listaProducto: productoCompaq[] = [];
     public pedidoSeleccionado: pedidoClienteDTO;
+    //kendo selectors
+    public idxSelectedItem: number;
+    public selectedKeys: string[] = [];
     formaProducto: FormGroup;
 
     ngOnInit() {
@@ -25,6 +33,9 @@ export class BsComponentComponent implements OnInit {
         this.facadeService.GetPedidosProductos().subscribe(res => {
             this.listaGridPedidos = res;
         });
+
+    }
+    selectedKeysChange(value: any) {
 
     }
     onSelect(pedido: pedidoClienteDTO) {

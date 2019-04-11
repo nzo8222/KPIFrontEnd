@@ -60,6 +60,12 @@ export class BlankPageComponent implements OnInit {
     this.facadeService.GetProductosContpaq().subscribe(res => {
       this.lstProductosContpaq = res;
     });
+    // this.lstProductosContpaq = [ { codigoProducto:"1234",
+    // nombreProducto:"prueba",
+    // razonSocial: "razonSocial",
+    // cantidadBolsas: "0",
+    // cumplimiento: 0,
+    // devoluciones: 0} ]
   }
 
 
@@ -74,7 +80,10 @@ export class BlankPageComponent implements OnInit {
 
     // Actualiza los valores.
     if (this.idxSelectedItem > -1) {
-      this.listaGridProductos[this.idxSelectedItem].cantidadBolsas = this.pedidoClienteForm.value.cantidad;
+      if(this.pedidoClienteForm.value.cantidad){
+        this.listaGridProductos[this.idxSelectedItem].cantidadBolsas = this.pedidoClienteForm.value.cantidad;
+      }
+      
       // this.listaGridProductos[this.idxSelectedItem].codigoProducto = this.pedidoClienteForm.value.codigo;
     } else {
       console.log('Debe seleccionar un elemento');

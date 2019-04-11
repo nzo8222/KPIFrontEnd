@@ -14,3 +14,23 @@ export interface pedidoClienteDTO{
     productosContpaq: productoCompaqDTO[];
     fechaEntrega: Date;
 }
+
+export interface DatosInventarioFisicoDTO {
+    codigoProducto: string;
+    nombreProducto: string;
+    numBolsas: number;
+    fechaInventario: Date;
+    folioRemision: number;
+}
+export interface productoPedidoKPI {
+    idProductoInventario : string;
+    razonSocial: string;
+    nombreProducto: string;
+    codigoProducto: number;
+    cantidadBolsas: number;
+    cumplimiento: number;
+    devoluciones: number;
+    discrepancia: number;
+    fechaRegistro: Date;
+    fechaEntrega: Date;    
+}

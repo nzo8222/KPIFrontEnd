@@ -19,31 +19,39 @@
 </div> -->
 <div>
 
-    <!-- <kendo-grid [data]="listaGridPedidos" [height]="410" [pageSize]="gridState.take" [skip]="gridState.skip"
+    <kendo-grid [data]="listaGridPedidos" [height]="410" [pageSize]="gridState.take" [skip]="gridState.skip"
       [sort]="gridState.sort" [pageable]="true" [sortable]="true" [selectable]="true"
       [selectable]="{ checkboxOnly: false, mode: 'single' }"
-     
-      
-      >
-      <kendo-grid-column field="codigoProducto" title="Codigo" editor="numeric" width="100">
+      (selectedKeysChange)="selectedKeysChange($event)"
+      [kendoGridSelectBy]="'codigoProducto'"
+      [selectedKeys]="selectedKeys"> 
+      <kendo-grid-column field="fechaRegistro" title="Fecha Registro" editor="numeric" width="120">
       </kendo-grid-column>
-      <kendo-grid-column field="nombreProducto" title="Nombre" width="250">
+      <kendo-grid-column field="fechaEntrega" title="Fecha Entrega" width="100">
       </kendo-grid-column>
-      <kendo-grid-column field="razonSocial" title="Razon social" width="250">
+      <kendo-grid-column field="codigoProducto" title="codigo Producto" width="100">
       </kendo-grid-column>
-      <kendo-grid-column field="cantidadBolsas" title="Cantidad Bolsas" width="150">
+      <kendo-grid-column field="nombreProducto" title="nombre Producto" width="150">
       </kendo-grid-column>
-      (click)="onSelect(pedido)"
-      [class.selected]="hero === selectedHero"
-    </kendo-grid> -->
-    <ul class="heroes">
+      <kendo-grid-column field="razonSocial" title="razon Social" width="150">
+      </kendo-grid-column>
+      <kendo-grid-column field="cantidadBolsas" title="cantidad Bolsas" width="100">
+      </kendo-grid-column>
+      <kendo-grid-column field="cumplimiento" title="cumplimiento" width="100">
+      </kendo-grid-column>
+      <kendo-grid-column field="devoluciones" title="devoluciones" width="100">
+      </kendo-grid-column>
+    </kendo-grid>
+    <!-- (click)="onSelect(pedido)"
+      [class.selected]="hero === selectedHero" -->
+    <!-- <ul class="heroes">
       <li *ngFor="let pedido of listaGridPedidos"
       (click)="onSelect(pedido)">
         <span class="badge">Fecha Registro: {{pedido.fechaRegistro}}</span>
         Fecha Entrega: {{pedido.fechaEntrega}} Codigo Producto: {{pedido.productosContpaq[0].codigoProducto}}
       </li>
-    </ul>
-    <div *ngIf="pedidoSeleccionado">
+    </ul>-->
+    <div *ngIf="pedidoSeleccionado"> 
 
       <h2>{{pedidoSeleccionado.fechaEntrega | uppercase}} Detalles</h2>
       

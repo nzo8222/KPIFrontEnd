@@ -34,3 +34,12 @@ export interface DatosGraficaCumplimiento {
     nombreProducto: String;
     cumplimientos: number[];
 }
+
+export interface DatosInventarioFisico {
+    idInventarioFisico: string;
+    codigoProducto: string;
+    nombreProducto: string;
+    numBolsas: number;
+    fechaInventario: Date;
+    folioRemision: number;
+}
