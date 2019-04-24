@@ -6,7 +6,7 @@ import { environment } from '../../../environments/environment';
 import { Producto } from '../interfaces/entities';
 import { productoCompaq, pedidoCliente, movimientoAlmacen, SolicitudFechas, DatosGraficaCumplimiento } from '../interfaces/models';
 import { RespuestaServidor } from '../interfaces/response';
-import { pedidoClienteDTO, productoCompaqDTO, DatosInventarioFisicoDTO, productoPedidoKPI } from '../interfaces/DTOs';
+import { pedidoClienteDTO, productoCompaqDTO, DatosInventarioFisicoDTO, productoPedidoKPI, clienteDTO, productoDTO } from '../interfaces/DTOs';
 
 class HttpRequestUtil {
   constructor(private http: HttpClient, public urlService: string) {}
@@ -83,6 +83,14 @@ export class FacadeService {
   constructor(http: HttpClient) {
     const urlService = environment.API_URL;
     this.request = new HttpRequestUtil(http, urlService);
+  }
+   // Get Productos del cliente especificado para el pedido
+   public GetProductosPedido(cliente: clienteDTO): Observable<productoDTO[]> {
+    return this.request.doGet<productoDTO[]>(`producto/${cliente.idCliente}`);
+  }
+   // Get Clientes para el pedido
+   public GetClientesPedido(): Observable<clienteDTO[]> {
+    return this.request.doGet<clienteDTO[]>(`PedidoCliente/GetClientesPedido`);
   }
   //Post Inventario Fisico
   public PostInventarioFisico(inventarioFisico: DatosInventarioFisicoDTO): Observable<RespuestaServidor>{

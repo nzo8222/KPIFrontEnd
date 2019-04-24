@@ -34,3 +34,25 @@ export interface productoPedidoKPI {
     fechaRegistro: Date;
     fechaEntrega: Date;    
 }
+export interface clienteDTO {
+        idCliente: string;
+        razonSocial: string;
+}
+export interface productoDTO {
+    idProducto: string;
+    codigoProducto: number;
+    nombreProducto: string;
+   
+}
+export interface pedidoDiarioDTO{
+    idPedidoDiario: string;
+    producto: productoDTO;
+    numBolsas: number;
+    numDia: number;
+}
+export interface pedidoSemanalDTO{
+    idPedidoSemanal: string;
+    pedidoDiario: pedidoDiarioDTO[];
+    fechaInicio: Date;
+    fechaFin: Date;
+}

@@ -1,0 +1,111 @@
+       <div class="row">
+         <div class="col-lg-8">
+           <form (ngSubmit)="onDropDownItemSelected()" #formaProductos="ngForm">
+              <div class="form-group">
+                <label for="Cliente">Cliente</label>
+                <kendo-autocomplete id="cliente" 
+        name="cliente" 
+        [data]="lstClientes"
+          [placeholder]="'Seleccione el cliente'" 
+          [valueField]="'razonSocial'" 
+          ngModel
+          aria-required="Introdusca el cliente">
+        </kendo-autocomplete>
+        <button class="btn btn-primary" (click)="OnClickObtenerClientes()">
+          Obtener Clientes
+        </button>
+              </div>
+              <div class="form-group">
+                <label for="Producto">Código Del producto</label>
+        <kendo-autocomplete id="codigo" 
+        name="codigo" [data]="lstProductosCliente"
+        [placeholder]="'Seleccione el código de producto'" 
+        [valueField]="'codigoProducto'" 
+        ngModel
+        aria-required="Introdusca el código del producto">
+      </kendo-autocomplete>
+      <button class="btn btn-primary" (click)="OnClickObtenerProductos()">
+        Obtener Productos
+      </button>   
+              </div>
+           </form>
+           <div class="col-lg-8">
+             <form [formGroup]="formaPedido" (ngSubmit)="onSubmitFormaProducto()">
+              <div class="form-group" >
+                <label for="PiezasLunes">Número de piezas Lunes</label>
+                <input type="text"
+                id="piezasLunes"
+                class="form-control"
+                formControlName="piezasLunes">
+                <span 
+                *ngIf="!formaPedido.get('piezasLunes').valid && formaPedido.get('piezasLunes').touched"
+                class="help-block">Ingresa un número de bolsas valido</span>
+              </div>
+              <div class="form-group" >
+                <label for="PiezasMartes">Número de piezas Martes</label>
+                <input type="text"
+                id="piezasMiercoles"
+                class="form-control"
+                formControlName="piezasMartes">
+                <span 
+                *ngIf="!formaPedido.get('piezasMartes').valid && formaPedido.get('piezasMartes').touched"
+                class="help-block">Ingresa un número de bolsas valido</span>
+              </div>
+              <div class="form-group" >
+                <label for="PiezasMiercoles">Número de piezas Miercoles</label>
+                <input type="text"
+                id="piezasMiercoles"
+                class="form-control"
+                formControlName="piezasMiercoles">
+                <span 
+                *ngIf="!formaPedido.get('piezasMiercoles').valid && formaPedido.get('piezasMiercoles').touched"
+                class="help-block">Ingresa un número de bolsas valido</span>
+              </div>
+              <div class="form-group" >
+                <label for="PiezasJueves">Número de piezas Jueves</label>
+                <input type="text"
+                id="piezasJueves"
+                class="form-control"
+                formControlName="piezasJueves">
+                <span 
+                *ngIf="!formaPedido.get('piezasJueves').valid && formaPedido.get('piezasJueves').touched"
+                class="help-block">Ingresa un número de bolsas valido</span>
+              </div>
+              <div class="form-group" >
+                <label for="PiezasViernes">Número de piezas Viernes</label>
+                <input type="text"
+                id="piezasViernes"
+                class="form-control"
+                formControlName="piezasViernes">
+                <span 
+                *ngIf="!formaPedido.get('piezasViernes').valid && formaPedido.get('piezasViernes').touched"
+                class="help-block">Ingresa un número de bolsas valido</span>
+              </div>
+              <div class="form-group" >
+                <label for="PiezasSabado">Número de piezas Sabado</label>
+                <input type="text"
+                id="piezasSabado"
+                class="form-control"
+                formControlName="piezasSabado">
+                <span 
+                *ngIf="!formaPedido.get('piezasSabado').valid && formaPedido.get('piezasSabado').touched"
+                class="help-block">Ingresa un número de bolsas valido</span>
+              </div>
+              <div class="form-group" >
+                <label for="PiezasDomingo">Número de piezas Domingo</label>
+                <input type="text"
+                id="piezasDomingo"
+                class="form-control"
+                formControlName="piezasDomingo">
+                <span 
+                *ngIf="!formaPedido.get('piezasDomingo').valid && formaPedido.get('piezasDomingo').touched"
+                class="help-block">Ingresa un número de bolsas valido</span>
+              </div>
+             </form>
+           </div>
+           <button class="btn btn-primary" 
+           (click)="OnClickAgregarProducto()"
+           [disabled]="!formaPedido.valid">Agregar Producto al pedido</button>
+          </div>
+       </div>
+       

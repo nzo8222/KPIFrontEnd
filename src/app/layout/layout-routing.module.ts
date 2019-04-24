@@ -16,7 +16,8 @@ const routes: Routes = [
             { path: 'grid', loadChildren: './grid/grid.module#GridModule' },
             { path: 'components', loadChildren: './bs-component/bs-component.module#BsComponentModule' },
             { path: 'blank-page', loadChildren: './blank-page/blank-page.module#BlankPageModule' },
-            { path: 'entrada-almacen', loadChildren: './entrada-almacen/entrada-almacen.module#EntradaAlmacenModule' }
+            { path: 'entrada-almacen', loadChildren: './entrada-almacen/entrada-almacen.module#EntradaAlmacenModule' },
+            { path: 'forma-pedido-cliente', loadChildren: './forma-pedido-cliente/forma-pedido-cliente.module#FormaPedidoClienteModule' }
         ]
     }
 ];
