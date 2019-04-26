@@ -40,19 +40,26 @@ export interface clienteDTO {
 }
 export interface productoDTO {
     idProducto: string;
-    codigoProducto: number;
+    codigoProducto: string;
     nombreProducto: string;
    
 }
 export interface pedidoDiarioDTO{
-    idPedidoDiario: string;
-    producto: productoDTO;
+    // idPedidoDiario: string;
+    IdProducto: string;
     numBolsas: number;
     numDia: number;
 }
 export interface pedidoSemanalDTO{
-    idPedidoSemanal: string;
-    pedidoDiario: pedidoDiarioDTO[];
+    // idPedidoSemanal: string;
+    pedidoDiarioDTO: pedidoDiarioDTO[];
+    fechaI: Date;
+    fechaF: Date;
+}
+export interface pedidoCompletoDTO {
+    idProducto: string;
+    numBolsas: number;
+    numDia: number;
     fechaInicio: Date;
     fechaFin: Date;
 }

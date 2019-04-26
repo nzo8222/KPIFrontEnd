@@ -4,8 +4,13 @@
     <form (ngSubmit)="onDropDownItemSelected()" #formaProductos="ngForm">
       <div class="form-group">
         <p>Escriba el código de producto.</p>
-        <kendo-autocomplete id="codigo" name="codigo" [data]="lstProductosContpaq"
-          [placeholder]="'Seleccione el código de producto'" [valueField]="'codigoProducto'" ngModel
+        <kendo-autocomplete 
+        id="codigo" 
+        name="codigo" 
+        [data]="lstProductosContpaq"
+          [placeholder]="'Seleccione el código de producto'" 
+          [valueField]="'codigoProducto'"
+           ngModel
           aria-required="Introdusca el codigo del producto">
         </kendo-autocomplete>
         <p>Escriba número de piezas</p>

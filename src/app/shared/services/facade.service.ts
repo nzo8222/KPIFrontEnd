@@ -6,7 +6,7 @@ import { environment } from '../../../environments/environment';
 import { Producto } from '../interfaces/entities';
 import { productoCompaq, pedidoCliente, movimientoAlmacen, SolicitudFechas, DatosGraficaCumplimiento } from '../interfaces/models';
 import { RespuestaServidor } from '../interfaces/response';
-import { pedidoClienteDTO, productoCompaqDTO, DatosInventarioFisicoDTO, productoPedidoKPI, clienteDTO, productoDTO } from '../interfaces/DTOs';
+import { pedidoClienteDTO, productoCompaqDTO, DatosInventarioFisicoDTO, productoPedidoKPI, clienteDTO, productoDTO, pedidoSemanalDTO } from '../interfaces/DTOs';
 
 class HttpRequestUtil {
   constructor(private http: HttpClient, public urlService: string) {}
@@ -83,6 +83,9 @@ export class FacadeService {
   constructor(http: HttpClient) {
     const urlService = environment.API_URL;
     this.request = new HttpRequestUtil(http, urlService);
+  }
+  public PostPedidoSemanal(pedidoSemanal: pedidoSemanalDTO): Observable<RespuestaServidor>{
+    return this.request.doPost<RespuestaServidor>(`PedidoCliente`, pedidoSemanal);
   }
    // Get Productos del cliente especificado para el pedido
    public GetProductosPedido(cliente: clienteDTO): Observable<productoDTO[]> {

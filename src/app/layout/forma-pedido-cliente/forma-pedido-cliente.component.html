@@ -16,13 +16,15 @@
         </button>
               </div>
               <div class="form-group">
-                <label for="Producto">Código Del producto</label>
-        <kendo-autocomplete id="codigo" 
-        name="codigo" [data]="lstProductosCliente"
-        [placeholder]="'Seleccione el código de producto'" 
-        [valueField]="'codigoProducto'" 
+                <label for="Producto">Nombre Del producto</label>
+        <kendo-autocomplete 
+        id="nombreProducto" 
+        name="nombreProducto"
+        [data]="lstProductosCliente"
+        [placeholder]="'Seleccione el nombre del producto'" 
+        [valueField]="'nombreProducto'" 
         ngModel
-        aria-required="Introdusca el código del producto">
+        aria-required="Introdusca el nombreProducto del producto">
       </kendo-autocomplete>
       <button class="btn btn-primary" (click)="OnClickObtenerProductos()">
         Obtener Productos
@@ -101,11 +103,32 @@
                 *ngIf="!formaPedido.get('piezasDomingo').valid && formaPedido.get('piezasDomingo').touched"
                 class="help-block">Ingresa un número de bolsas valido</span>
               </div>
+              <div class="form-group" >
+                <label for="FechaInicio">Fecha inicio de semana</label>
+                <input type="date"
+                id="fechaInicio"
+                class="form-control"
+                formControlName="fechaInicio">
+                <span 
+                *ngIf="!formaPedido.get('fechaInicio').valid && formaPedido.get('fechaInicio').touched"
+                class="help-block">Ingresa una fecha valida</span>
+              </div>
+              <div class="form-group" >
+                <label for="FechaFin">Fecha fin de semana</label>
+                <input type="date"
+                id="fechaFin"
+                class="form-control"
+                formControlName="fechaFin">
+                <span 
+                *ngIf="!formaPedido.get('fechaFin').valid && formaPedido.get('fechaFin').touched"
+                class="help-block">Ingresa una fecha valida</span>
+              </div>
+              <button class="btn btn-primary" 
+           type="submit"
+           [disabled]="!formaPedido.valid ">Agregar Producto al pedido</button>
              </form>
            </div>
-           <button class="btn btn-primary" 
-           (click)="OnClickAgregarProducto()"
-           [disabled]="!formaPedido.valid">Agregar Producto al pedido</button>
+           
           </div>
        </div>
-       
+       <!--  <button class="btn btn-primary" type="submit" [disabled]="!formaPedidos.valid">Agregar Pedido</button> -->
