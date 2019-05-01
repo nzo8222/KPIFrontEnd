@@ -93,13 +93,13 @@ export class ChartsComponent implements OnInit {
     public lineChartData: any[] = [];
 
     public lineChartLabels: Array<any> = [
-        'January',
-        'February',
-        'March',
-        'April',
-        'May',
-        'June',
-        'July'
+        'Lunes',
+        'Martes',
+        'Miercoles',
+        'Jueves',
+        'Viernes',
+        'Sabado',
+        'Domingo'
     ];
     public lineChartOptions: any = {
         responsive: true
@@ -182,8 +182,8 @@ export class ChartsComponent implements OnInit {
 
         var solicitudFecha = new SolicitudFechas();
 
-        solicitudFecha.FechaF = new Date(2019, 3, 10);
-        solicitudFecha.FechaI = new Date(2019, 3, 1);
+        solicitudFecha.FechaF = new Date(2019, 4, 5);
+        solicitudFecha.FechaI = new Date(2019, 3, 29);
 
         this.servicio.PostDatosGraficaCumplimientoProducto(solicitudFecha).subscribe(res => {
             // Rellena eje Y con información (ChartLabelData).

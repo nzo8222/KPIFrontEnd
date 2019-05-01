@@ -1,6 +1,7 @@
 export interface Cliente {
+
     idCliente: string;
-    nombre: string;
+    razonSocial: string;
 }
 
 export interface Pedido {

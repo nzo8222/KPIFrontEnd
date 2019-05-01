@@ -38,11 +38,14 @@ export interface clienteDTO {
         idCliente: string;
         razonSocial: string;
 }
+export interface clienteDTOSinID {
+    razonSocial: string;
+}
 export interface productoDTO {
     idProducto: string;
     codigoProducto: string;
     nombreProducto: string;
-   
+    
 }
 export interface pedidoDiarioDTO{
     // idPedidoDiario: string;
@@ -62,4 +65,10 @@ export interface pedidoCompletoDTO {
     numDia: number;
     fechaInicio: Date;
     fechaFin: Date;
+}
+export interface productoDTOConCliente {
+    idProducto: string;
+    codigoProducto: number;
+    nombreProducto: string;
+    idCliente: string;
 }

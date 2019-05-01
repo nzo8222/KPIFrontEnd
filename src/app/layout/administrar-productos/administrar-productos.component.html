@@ -1,0 +1,63 @@
+<div class="row">
+    <div class="col-lg-8">
+        <form [formGroup]="formaProducto" (ngSubmit)="onSubmitFormaProducto()">
+            <label for="Cliente">Cliente</label>
+                <kendo-autocomplete  
+                id="clientes"  
+        name="clientes" 
+        [data]="lstClientes"
+          [placeholder]="'Seleccione el cliente'" 
+          [valueField]="'razonSocial'" 
+          ngModel
+          aria-required="Introdusca el cliente" 
+          formControlName="clientes">
+        </kendo-autocomplete>
+        <button class="btn btn-primary" (click)="OnClickObtenerClientes()">
+          Obtener Clientes
+        </button>
+        <kendo-grid [data]="listaGridProductos" [height]="410" [pageSize]="gridState.take" [skip]="gridState.skip"
+      [sort]="gridState.sort" [pageable]="true" [sortable]="true" [selectable]="true"
+      [selectable]="{ checkboxOnly: false, mode: 'single' }"
+      (selectedKeysChange)="selectedKeysChange($event)"  
+      [kendoGridSelectBy]="'codigoProducto'"
+      [selectedKeys]="selectedKeys"> 
+      <kendo-grid-column field="idProducto" title="ID" width="100">
+      </kendo-grid-column>
+      <kendo-grid-column field="nombreProducto" title="Nombre" width="150">
+      </kendo-grid-column>
+      <kendo-grid-column field="codigoProducto" title="Codigo" width="150">
+        </kendo-grid-column> 
+    </kendo-grid>  
+    <button class="btn btn-primary"
+     (click)="OnClickObtenerProductosPorCliente()"
+     [disabled]="!formaProducto.get('clientes').valid">
+        Obtener Productos
+      </button>
+            <div class="form-group" >
+              <label for="nombreProducto">Nombre del producto</label>
+              <input type="text"
+              id="nombreProducto"
+              class="form-control"
+              formControlName="nombreProducto">
+              <span 
+              *ngIf="!formaProducto.get('nombreProducto').valid && formaProducto.get('nombreProducto').touched"
+              class="help-block">Ingresa un nombre</span>
+            </div>
+            <div class="form-group" >
+              <label for="codigo">Codigo de producto</label>
+              <input type="text"
+              id="piezasMiercoles"
+              class="form-control"
+              formControlName="codigo">
+              <span 
+              *ngIf="!formaProducto.get('codigo').valid && formaProducto.get('codigo').touched"
+              class="help-block">Ingresa un codigo valido</span>
+            </div>
+            
+            <button class="btn btn-primary" 
+         type="submit"
+         [disabled]="!formaProducto.valid">Agregar Producto</button>
+           </form>
+     </div>
+  </div>
+  <!--  <button class="btn btn-primary" type="submit" [disabled]="!formaPedidos.valid">Agregar Pedido</button> -->

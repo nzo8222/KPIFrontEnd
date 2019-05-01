@@ -36,7 +36,16 @@
             <i class="fa fa-fw fa-archive"></i>&nbsp;
             <span>Pedido Cliente</span>
         </a>
-        <div class="nested-menu">
+        <a [routerLink]="['/agregar-clientes-productos']" [routerLinkActive]="['router-link-active']" class="list-group-item">
+            <i class="fa fa-fw fa-archive"></i>&nbsp;
+            <span>Administrar Clientes</span>
+        </a>
+        <a [routerLink]="['/administrar-productos']" [routerLinkActive]="['router-link-active']" class="list-group-item">
+            <i class="fa fa-fw fa-archive"></i>&nbsp;
+            <span>Administrar Productos</span>
+        </a>
+           
+        <!-- <div class="nested-menu">
             <a class="list-group-item" (click)="addExpandClass('pages')">
                 <i class="fa fa-plus"></i>&nbsp;
                 <span>{{ 'Menu' | translate }}</span>
@@ -63,15 +72,15 @@
                     </li>
                 </ul>
             </li>
-        </div>
+        </div> -->
         <a [routerLink]="['/blank-page']" [routerLinkActive]="['router-link-active']" class="list-group-item">
             <i class="fa fa-file-o"></i>&nbsp;
             <span>{{ 'Blank Page' | translate }}</span>
         </a>
-        <a href="http://www.strapui.com/" class="list-group-item">
+        <!-- <a href="http://www.strapui.com/" class="list-group-item">
             <i class="fa fa-caret-down"></i>&nbsp;
             <span>{{ 'More Themes' | translate }}</span>
-        </a>
+        </a> -->
 
         <div class="header-fields">
             <a (click)="rltAndLtr()" class="list-group-item">

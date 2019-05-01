@@ -69,7 +69,16 @@
                     Line Chart
                 </div>
                 <div class="card-body">
-                    <canvas baseChart height="130" [datasets]="lineChartData" [labels]="lineChartLabels" [options]="lineChartOptions" [colors]="lineChartColors" [legend]="lineChartLegend" [chartType]="lineChartType" (chartHover)="chartHovered($event)" (chartClick)="chartClicked($event)">
+                    <canvas 
+                    baseChart height="130" 
+                    [datasets]="lineChartData" 
+                    [labels]="lineChartLabels" 
+                    [options]="lineChartOptions" 
+                    [colors]="lineChartColors" 
+                    [legend]="lineChartLegend" 
+                    [chartType]="lineChartType" 
+                    (chartHover)="chartHovered($event)" 
+                    (chartClick)="chartClicked($event)">
                     </canvas>
                 </div>
             </div>

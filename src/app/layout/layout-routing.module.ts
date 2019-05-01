@@ -17,7 +17,9 @@ const routes: Routes = [
             { path: 'components', loadChildren: './bs-component/bs-component.module#BsComponentModule' },
             { path: 'blank-page', loadChildren: './blank-page/blank-page.module#BlankPageModule' },
             { path: 'entrada-almacen', loadChildren: './entrada-almacen/entrada-almacen.module#EntradaAlmacenModule' },
-            { path: 'forma-pedido-cliente', loadChildren: './forma-pedido-cliente/forma-pedido-cliente.module#FormaPedidoClienteModule' }
+            { path: 'forma-pedido-cliente', loadChildren: './forma-pedido-cliente/forma-pedido-cliente.module#FormaPedidoClienteModule' },
+            { path: 'agregar-clientes-productos', loadChildren: './agregar-clientes-productos/agregar-clientes-productos.module#AgregarClientesProductosModule' },
+            { path: 'administrar-productos', loadChildren: './administrar-productos/administrar-productos.module#AdministrarProductosModule' }
         ]
     }
 ];

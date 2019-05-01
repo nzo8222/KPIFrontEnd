@@ -120,6 +120,8 @@ export class FormaPedidoClienteComponent implements OnInit {
     pedidoDiario5.numBolsas = this.formaPedido.value.piezasSabado;
     pedidoDiario5.numDia = 5;
 
+    pedidoDiario.push(pedidoDiario5);
+
     let pedidoDiario6: pedidoDiarioDTO;
 
     pedidoDiario6 = {
@@ -141,10 +143,11 @@ export class FormaPedidoClienteComponent implements OnInit {
     pedidoSemanal.fechaF = this.formaPedido.value.fechaFin;
 
     this.facadeService.PostPedidoSemanal(pedidoSemanal).subscribe(RespuestaServidor => {
-      if(RespuestaServidor.exitoso) { console.log("funka la wea" )} else {
+      if(RespuestaServidor.exitoso) {  console.log("funka la wea" )} else {
         console.log(`Tronó esta madre ${RespuestaServidor.mensajeError}`);
       }
     });
+    this.formaPedido.reset();
   }
 
   ngOnInit() {
@@ -157,7 +160,7 @@ export class FormaPedidoClienteComponent implements OnInit {
       'piezasSabado': new FormControl(null, [Validators.required, Validators.pattern('^[0-9]*$')]),
       'piezasDomingo': new FormControl(null, [Validators.required, Validators.pattern('^[0-9]*$')]),
       'fechaInicio': new FormControl(null, [Validators.required]),
-      'fechaFin': new FormControl(null, [Validators.required]),
+      'fechaFin': new FormControl(null, [Validators.required])
     });
   }
   OnClickAgregarProducto() {
