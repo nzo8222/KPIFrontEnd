@@ -13,7 +13,7 @@ export class AdministrarProductosComponent implements OnInit {
   formaProducto: FormGroup;
   constructor(private facadeService: FacadeService) { }
   public lstClientes: clienteDTO[];
-  listaGridProductos: productoDTO[];
+  public listaGridProductos: productoDTO[];
   public gridState: State = {
     sort: [],
     skip: 0,
@@ -23,7 +23,8 @@ export class AdministrarProductosComponent implements OnInit {
   ngOnInit() {
     this.formaProducto = new FormGroup({ 
       'clientes': new FormControl(null, [Validators.required]),
-      'nombreProducto': new FormControl(null, [Validators.required, Validators.pattern('[a-z|A-Z|0-9|\s]*'), Validators.minLength(5), Validators.maxLength(20)]),
+      //[a-z|A-Z|0-9|\s]*
+      'nombreProducto': new FormControl(null, [Validators.required, Validators.pattern('^[a-zA-Z0-9_ ]*$'), Validators.minLength(5), Validators.maxLength(20)]),
       'codigo': new FormControl(null, [Validators.required, Validators.pattern('^[0-9]*$'),Validators.minLength(4),Validators.maxLength(5)]),
     });
   }

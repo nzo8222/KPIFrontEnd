@@ -20,10 +20,10 @@ export class AgregarClientesProductosComponent implements OnInit {
   };
   public selectedKeys: string[] = [];
   constructor(private facadeService: FacadeService) { }
-
+  //^[a-zA-Z0-9_.-]*$ ----- /^[\w\s]+$/ -------- ^[a-zA-Z\s]+$ --------^[a-zA-Z0-9\s]*$
   ngOnInit() {
     this.formaCliente = new FormGroup({ 
-      'razonSocial': new FormControl(null, [Validators.required, Validators.pattern('^[a-zA-Z0-9_.-]*$'), Validators.minLength(5)]),
+      'razonSocial': new FormControl(null, [Validators.required, Validators.pattern('^[a-zA-Z0-9_ ]*$'), Validators.minLength(5)]),
      });
   }
   obtenerClientes(){

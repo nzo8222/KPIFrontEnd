@@ -1,4 +1,4 @@
-<div [@routerTransition]>
+<!-- <div [@routerTransition]>
     <app-page-header [heading]="'Charts'" [icon]="'fa-bar-chart-o'"></app-page-header>
     <div class="row">
         <div class="col col-sm-6">
@@ -52,7 +52,7 @@
         </div>
     </div>
     <div class="row">
-        <!-- <div class="col col-sm-6">
+        <div class="col col-sm-6">
             <div class="card mb-3">
                 <div class="card-header">
                     Polar Area Chart
@@ -62,7 +62,7 @@
                     </canvas>
                 </div>
             </div>
-        </div> -->
+        </div>
         <div *ngIf="loadedChart" class="col">
             <div class="card mb-3">
                 <div class="card-header">
@@ -84,4 +84,61 @@
             </div>
         </div>
     </div>
+</div> -->
+<div class="row">
+    <div class="col-lg-8">
+        <form [formGroup]="formaGrafica" (ngSubmit)="onSubmitFormaGrafica()">
+                <label for="Cliente">Cliente</label>
+                <kendo-autocomplete  
+                id="clientes"  
+          name="clientes" 
+          [data]="lstClientes"
+          [placeholder]="'Seleccione el cliente'" 
+          [valueField]="'razonSocial'" 
+          ngModel
+          aria-required="Introdusca el cliente" 
+          formControlName="clientes">
+        </kendo-autocomplete>
+        <button class="btn btn-primary" (click)="OnClickObtenerClientes()">
+          Obtener Clientes
+        </button>
+        <div class="form-group" >
+                <label for="FechaInicio">Fecha inicio de semana</label>
+                <input type="date"
+                id="fechaInicio"
+                class="form-control"
+                formControlName="fechaInicio">
+                <span 
+                *ngIf="!formaGrafica.get('fechaInicio').valid && formaGrafica.get('fechaInicio').touched"
+                class="help-block">Ingresa una fecha valida</span>
+              </div>
+              <div class="form-group" >
+                <label for="FechaFin">Fecha fin de semana</label>
+                <input type="date"
+                id="fechaFin"
+                class="form-control"
+                formControlName="fechaFin">
+                <span 
+                *ngIf="!formaGrafica.get('fechaFin').valid && formaGrafica.get('fechaFin').touched"
+                class="help-block">Ingresa una fecha valida</span>
+              </div>
+              <button class="btn btn-primary" 
+              type="submit"
+              [disabled]="!formaGrafica.valid">Obtener Pedidos</button>
+        </form> 
+        <kendo-grid [data]="listaGridPedidosSemanal" [height]="410" [pageSize]="gridState.take" [skip]="gridState.skip"
+        [sort]="gridState.sort" [pageable]="true" [sortable]="true" [selectable]="true"
+        [selectable]="{ checkboxOnly: false, mode: 'single' }"
+        (selectedKeysChange)="selectedKeysChange($event)"  
+        [kendoGridSelectBy]="'codigoProducto'"
+        [selectedKeys]="selectedKeys"> 
+        <kendo-grid-column field="idProducto" title="ID" width="100">
+        </kendo-grid-column>
+        <kendo-grid-column field="nombreProducto" title="Nombre" width="150">
+        </kendo-grid-column>
+        <kendo-grid-column field="codigoProducto" title="Codigo" width="150">
+          </kendo-grid-column> 
+      </kendo-grid>  
+    </div>
 </div>
+

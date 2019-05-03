@@ -4,8 +4,8 @@
             <label for="Cliente">Cliente</label>
                 <kendo-autocomplete  
                 id="clientes"  
-        name="clientes" 
-        [data]="lstClientes"
+          name="clientes" 
+          [data]="lstClientes"
           [placeholder]="'Seleccione el cliente'" 
           [valueField]="'razonSocial'" 
           ngModel
@@ -28,11 +28,7 @@
       <kendo-grid-column field="codigoProducto" title="Codigo" width="150">
         </kendo-grid-column> 
     </kendo-grid>  
-    <button class="btn btn-primary"
-     (click)="OnClickObtenerProductosPorCliente()"
-     [disabled]="!formaProducto.get('clientes').valid">
-        Obtener Productos
-      </button>
+    
             <div class="form-group" >
               <label for="nombreProducto">Nombre del producto</label>
               <input type="text"
@@ -58,6 +54,11 @@
          type="submit"
          [disabled]="!formaProducto.valid">Agregar Producto</button>
            </form>
+           <button class="btn btn-primary"
+     (click)="OnClickObtenerProductosPorCliente()"
+     [disabled]="!formaProducto.get('clientes').valid">
+        Obtener Productos
+      </button>
      </div>
   </div>
   <!--  <button class="btn btn-primary" type="submit" [disabled]="!formaPedidos.valid">Agregar Pedido</button> -->

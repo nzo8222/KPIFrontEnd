@@ -2,6 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { routerTransition } from '../../router.animations';
 import { FacadeService } from 'src/app/shared/services/facade.service';
 import { SolicitudFechas } from 'src/app/shared/interfaces/models';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { clienteDTO } from 'src/app/shared/interfaces/DTOs';
+import { State } from '@progress/kendo-data-query';
 
 @Component({
     selector: 'app-charts',
@@ -11,8 +14,27 @@ import { SolicitudFechas } from 'src/app/shared/interfaces/models';
 })
 export class ChartsComponent implements OnInit {
     // bar chart
+    formaGrafica: FormGroup;
+    public listaGridPedidosSemanal: any[];
+    public gridState: State = {
+        sort: [],
+        skip: 0,
+        take: 10
+      };
+      public selectedKeys: string[] = [];
+      selectedKeysChange(value: any) {
 
+    }
+    public lstClientes: clienteDTO[];
+    onSubmitFormaGrafica(){
 
+    }
+    OnClickObtenerClientes(){
+        this.servicio.GetClientesPedido().subscribe(
+          res => {
+            this.lstClientes = res;
+          });
+      }
     // CreationFlags
     public loadedChart: boolean;
     public barChartOptions: any = {
@@ -170,6 +192,12 @@ export class ChartsComponent implements OnInit {
     constructor(private servicio: FacadeService) { }
 
     ngOnInit() {
+        this.formaGrafica = new FormGroup({ 
+            'clientes': new FormControl(null, [Validators.required]),
+            //[a-z|A-Z|0-9|\s]*
+            'fechaInicio': new FormControl(null, [Validators.required]),
+            'fechaFin': new FormControl(null, [Validators.required]),
+          });
         this.barChartType = 'bar';
         this.barChartLegend = true;
         this.doughnutChartType = 'doughnut';
