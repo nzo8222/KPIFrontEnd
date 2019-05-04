@@ -132,12 +132,18 @@
         (selectedKeysChange)="selectedKeysChange($event)"  
         [kendoGridSelectBy]="'codigoProducto'"
         [selectedKeys]="selectedKeys"> 
-        <kendo-grid-column field="idProducto" title="ID" width="100">
+        <kendo-grid-column field="idPedidoSemanal" title="ID" width="100">
         </kendo-grid-column>
         <kendo-grid-column field="nombreProducto" title="Nombre" width="150">
         </kendo-grid-column>
-        <kendo-grid-column field="codigoProducto" title="Codigo" width="150">
+        <kendo-grid-column field="numBolsas" title="Numero de bolsas" width="150">
           </kendo-grid-column> 
+        <kendo-grid-column field="promedioCumplimiento" title="Promedio Cumplimiento" width="150">
+        </kendo-grid-column> 
+        <kendo-grid-column field="fechaInicio" title="Fecha Inicio" width="150">
+        </kendo-grid-column> 
+        <kendo-grid-column field="fechaFin" title="Fecha Fin" width="150">
+        </kendo-grid-column> 
       </kendo-grid>  
     </div>
 </div>

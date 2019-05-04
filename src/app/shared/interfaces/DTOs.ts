@@ -82,3 +82,16 @@ export interface RegistroUsuarioDTO {
     password: string;
     email: string;
 }
+export interface PedidoSemanalGraficaDTO {
+    idPedidoSemanal: string;
+    nombreProducto: string;
+    numBolsas: number;
+    fechaInicio: Date;
+    fechaFin:Date;
+    promedioCumplimiento: number;
+}
+export interface SolicitudGraficaCumplimientioDTO {
+    idCliente: string;
+    fechaInicio: Date;
+    fechaFin: Date;
+}

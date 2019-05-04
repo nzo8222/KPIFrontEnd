@@ -3,7 +3,7 @@ import { routerTransition } from '../../router.animations';
 import { FacadeService } from 'src/app/shared/services/facade.service';
 import { SolicitudFechas } from 'src/app/shared/interfaces/models';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { clienteDTO } from 'src/app/shared/interfaces/DTOs';
+import { clienteDTO, SolicitudGraficaCumplimientioDTO, PedidoSemanalGraficaDTO } from 'src/app/shared/interfaces/DTOs';
 import { State } from '@progress/kendo-data-query';
 
 @Component({
@@ -15,7 +15,7 @@ import { State } from '@progress/kendo-data-query';
 export class ChartsComponent implements OnInit {
     // bar chart
     formaGrafica: FormGroup;
-    public listaGridPedidosSemanal: any[];
+    public listaGridPedidosSemanal: PedidoSemanalGraficaDTO[] = [];
     public gridState: State = {
         sort: [],
         skip: 0,
@@ -27,7 +27,19 @@ export class ChartsComponent implements OnInit {
     }
     public lstClientes: clienteDTO[];
     onSubmitFormaGrafica(){
-
+        let clienteSeleccionado = this.lstClientes.find(c=>c.razonSocial===this.formaGrafica.value.clientes)
+        
+        let solicitud: SolicitudGraficaCumplimientioDTO = {fechaFin: new Date,
+                                                           fechaInicio: new Date,
+                                                           idCliente: ''};
+ 
+        solicitud.idCliente = clienteSeleccionado.idCliente;
+        solicitud.fechaInicio = this.formaGrafica.value.fechaInicio;
+        solicitud.fechaFin = this.formaGrafica.value.fechaFin;
+        this.servicio.PostSolicitudPedidosSemanales(solicitud).subscribe(
+            res => {
+            this.listaGridPedidosSemanal = res;
+          });
     }
     OnClickObtenerClientes(){
         this.servicio.GetClientesPedido().subscribe(
