@@ -63,30 +63,11 @@
                 </div>
             </div>
         </div>
-        <div *ngIf="loadedChart" class="col">
-            <div class="card mb-3">
-                <div class="card-header">
-                    Line Chart
-                </div>
-                <div class="card-body">
-                    <canvas 
-                    baseChart height="130" 
-                    [datasets]="lineChartData" 
-                    [labels]="lineChartLabels" 
-                    [options]="lineChartOptions" 
-                    [colors]="lineChartColors" 
-                    [legend]="lineChartLegend" 
-                    [chartType]="lineChartType" 
-                    (chartHover)="chartHovered($event)" 
-                    (chartClick)="chartClicked($event)">
-                    </canvas>
-                </div>
-            </div>
-        </div>
+   
     </div>
 </div> -->
 <div class="row">
-    <div class="col-lg-8">
+    <div class="col-lg-10">
         <form [formGroup]="formaGrafica" (ngSubmit)="onSubmitFormaGrafica()">
                 <label for="Cliente">Cliente</label>
                 <kendo-autocomplete  
@@ -126,11 +107,18 @@
               type="submit"
               [disabled]="!formaGrafica.valid">Obtener Pedidos</button>
         </form> 
-        <kendo-grid [data]="listaGridPedidosSemanal" [height]="410" [pageSize]="gridState.take" [skip]="gridState.skip"
-        [sort]="gridState.sort" [pageable]="true" [sortable]="true" [selectable]="true"
+        <kendo-grid 
+        [data]="listaGridPedidosSemanal" 
+        [height]="410" 
+        [pageSize]="gridState.take" 
+        [skip]="gridState.skip"
+        [sort]="gridState.sort" 
+        [pageable]="true" 
+        [sortable]="true" 
+        [selectable]="true"
         [selectable]="{ checkboxOnly: false, mode: 'single' }"
         (selectedKeysChange)="selectedKeysChange($event)"  
-        [kendoGridSelectBy]="'codigoProducto'"
+        [kendoGridSelectBy]="'idPedidoSemanal'"
         [selectedKeys]="selectedKeys"> 
         <kendo-grid-column field="idPedidoSemanal" title="ID" width="100">
         </kendo-grid-column>
@@ -145,6 +133,34 @@
         <kendo-grid-column field="fechaFin" title="Fecha Fin" width="150">
         </kendo-grid-column> 
       </kendo-grid>  
+      
     </div>
 </div>
-
+<div class="row">
+    <div class="col-lg-10">
+        <button 
+        class="btn btn-primary" 
+        (click)="onClickObtenerGrafica()"
+        [disabled]="!selectedKeys[0]">Generar Grafica</button>
+    <div *ngIf="loadedChart" class="col">
+        <div class="card mb-3">
+            <div class="card-header">
+                Line Chart
+            </div>
+            <div class="card-body">
+                <canvas 
+                baseChart height="130" 
+                [datasets]="lineChartData" 
+                [labels]="lineChartLabels" 
+                [options]="lineChartOptions" 
+                [colors]="lineChartColors" 
+                [legend]="lineChartLegend" 
+                [chartType]="lineChartType" 
+                (chartHover)="chartHovered($event)" 
+                (chartClick)="chartClicked($event)">
+                </canvas>
+            </div>
+        </div>
+    </div>
+</div>
+</div>

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { routerTransition } from '../../router.animations';
 import { FacadeService } from 'src/app/shared/services/facade.service';
-import { SolicitudFechas } from 'src/app/shared/interfaces/models';
+import { SolicitudGraficaCumplimiento } from 'src/app/shared/interfaces/models';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { clienteDTO, SolicitudGraficaCumplimientioDTO, PedidoSemanalGraficaDTO } from 'src/app/shared/interfaces/DTOs';
 import { State } from '@progress/kendo-data-query';
@@ -16,6 +16,7 @@ export class ChartsComponent implements OnInit {
     // bar chart
     formaGrafica: FormGroup;
     public listaGridPedidosSemanal: PedidoSemanalGraficaDTO[] = [];
+    public idxSelectedItem: number;
     public gridState: State = {
         sort: [],
         skip: 0,
@@ -25,10 +26,44 @@ export class ChartsComponent implements OnInit {
       selectedKeysChange(value: any) {
 
     }
-    public lstClientes: clienteDTO[];
+    onClickObtenerGrafica(){
+        this.loadedChart = false;
+        this.lineChartData = [];
+        const idx = this.listaGridPedidosSemanal.findIndex(e => e.idPedidoSemanal === this.selectedKeys[0]);
+        if (idx > -1) { this.idxSelectedItem = idx; }
+        if (this.idxSelectedItem > -1) {
+            var solicitudGraficaCumplimiento = new SolicitudGraficaCumplimiento();
+            //   this.listaGridProductos[this.idxSelectedItem].cantidadBolsas = this.pedidoClienteForm.value.cantidad;
+        solicitudGraficaCumplimiento.idPedidoSemanal = this.listaGridPedidosSemanal[this.idxSelectedItem].idPedidoSemanal;
+
+        this.servicio.PostDatosGraficaCumplimientoProducto(solicitudGraficaCumplimiento).subscribe(res => {
+            // Rellena eje Y con información (ChartLabelData).
+            res.forEach(c => {
+                this.lineChartData.push({
+                    data: c.cumplimientos,
+                    label: c.nombreProducto
+                })
+            res.forEach(c => {
+                this.barChartData.push({
+                    data: c.cumplimientos,
+                    label: c.nombreProducto
+                })
+            })
+            });
+            // TODO: Preguntar qué va en eje X (ChartLabel)
+            this.loadedChart = true;
+        });
+
+        }
+    }
+    public lstClientes: clienteDTO[] = [];
     onSubmitFormaGrafica(){
-        let clienteSeleccionado = this.lstClientes.find(c=>c.razonSocial===this.formaGrafica.value.clientes)
-        
+        if(this.lstClientes.length > 0){
+            var clienteSeleccionado = this.lstClientes.find(c=>c.razonSocial===this.formaGrafica.value.clientes)
+        }else{
+            return;
+        }
+       
         let solicitud: SolicitudGraficaCumplimientioDTO = {fechaFin: new Date,
                                                            fechaInicio: new Date,
                                                            idCliente: ''};
@@ -54,20 +89,20 @@ export class ChartsComponent implements OnInit {
         responsive: true
     };
     public barChartLabels: string[] = [
-        '2006',
-        '2007',
-        '2008',
-        '2009',
-        '2010',
-        '2011',
-        '2012'
+        'Lunes',
+        'Martes',
+        'Miercoles',
+        'Jueves',
+        'Viernes',
+        'Sabado',
+        'Domingo'
     ];
     public barChartType: string;
     public barChartLegend: boolean;
 
     public barChartData: any[] = [
-        { data: [65, 59, 80, 81, 56, 55, 40], label: 'Series A' },
-        { data: [28, 48, 40, 19, 86, 27, 90], label: 'Series B' }
+        // { data: [65, 59, 80, 81, 56, 55, 40], label: 'Series A' },
+        // { data: [28, 48, 40, 19, 86, 27, 90], label: 'Series B' }
     ];
 
     // Doughnut
@@ -220,24 +255,6 @@ export class ChartsComponent implements OnInit {
         this.lineChartLegend = true;
         this.lineChartType = 'line';
 
-        var solicitudFecha = new SolicitudFechas();
-
-        solicitudFecha.FechaF = new Date(2019, 4, 5);
-        solicitudFecha.FechaI = new Date(2019, 3, 29);
-
-        this.servicio.PostDatosGraficaCumplimientoProducto(solicitudFecha).subscribe(res => {
-            // Rellena eje Y con información (ChartLabelData).
-            res.forEach(c => {
-                this.lineChartData.push({
-                    data: c.cumplimientos,
-                    label: c.nombreProducto
-                })
-            });
-
-            // TODO: Preguntar qué va en eje X (ChartLabel)
-
-            this.loadedChart = true;
-        });
-
+       
     }
 }

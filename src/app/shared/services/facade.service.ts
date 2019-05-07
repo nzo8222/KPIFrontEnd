@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import { Producto } from '../interfaces/entities';
-import { productoCompaq, pedidoCliente, movimientoAlmacen, SolicitudFechas, DatosGraficaCumplimiento } from '../interfaces/models';
+import { productoCompaq, pedidoCliente, movimientoAlmacen, DatosGraficaCumplimiento, SolicitudGraficaCumplimiento } from '../interfaces/models';
 import { RespuestaServidor } from '../interfaces/response';
 import { pedidoClienteDTO, productoCompaqDTO, DatosInventarioFisicoDTO, productoPedidoKPI, clienteDTO, productoDTO, pedidoSemanalDTO, clienteDTOSinID, productoDTOConCliente, LoginDTO, RegistroUsuarioDTO, SolicitudGraficaCumplimientioDTO, PedidoSemanalGraficaDTO } from '../interfaces/DTOs';
 
@@ -115,8 +115,8 @@ export class FacadeService {
     return this.request.doPost<RespuestaServidor>(`Producto/PutProductoPedido`, productoCompaqDTO);
   }
   // Get producto
-  public PostDatosGraficaCumplimientoProducto(periodo: SolicitudFechas): Observable<DatosGraficaCumplimiento[]> {
-    return this.request.doPost<DatosGraficaCumplimiento[]>(`PedidoCliente/GetGraficaCumplimiento`, periodo);
+  public PostDatosGraficaCumplimientoProducto(solicitudGraficaCumplimiento: SolicitudGraficaCumplimiento): Observable<DatosGraficaCumplimiento[]> {
+    return this.request.doPost<DatosGraficaCumplimiento[]>(`PedidoCliente/GetGraficaLineaCumplimiento`, solicitudGraficaCumplimiento);
   }
   // Get Pedidos con sus productos
   public GetPedidosProductos(): Observable<productoPedidoKPI[]> {

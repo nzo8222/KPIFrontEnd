@@ -25,9 +25,8 @@ export interface movimientoAlmacen {
         FolioRemision: string;
 }
 
-export class SolicitudFechas {
-    public FechaI: Date;
-    public FechaF: Date;
+export class SolicitudGraficaCumplimiento {
+    public idPedidoSemanal: string;
 }
 
 export interface DatosGraficaCumplimiento {
