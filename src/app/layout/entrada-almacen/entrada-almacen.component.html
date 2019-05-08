@@ -1,26 +1,74 @@
 <div class="row">
     <div class="col-lg-8">
+        <kendo-grid
+        [data]="listaGridMovimientos" 
+        [height]="410" 
+        [pageSize]="gridState.take" 
+        [skip]="gridState.skip"
+        [sort]="gridState.sort" 
+        [pageable]="true" 
+        [sortable]="true" 
+        [selectable]="true"
+        [selectable]="{ checkboxOnly: false, mode: 'single' }"
+        (selectedKeysChange)="selectedKeysChange($event)"    
+        [kendoGridSelectBy]="'idMovimientoAlmacen'"
+        [selectedKeys]="selectedKeys"> 
+        <kendo-grid-column field="idMovimientoAlmacen" title="ID" width="100">
+        </kendo-grid-column>
+        <kendo-grid-column field="nombreProducto" title="Nombre" width="150">
+        </kendo-grid-column> 
+        <kendo-grid-column field="codigoProducto" title="Codigo" width="150">
+        </kendo-grid-column>
+        <kendo-grid-column field="tipoMovimiento" title="Tipo Movimiento" width="150">
+        </kendo-grid-column> 
+        <kendo-grid-column field="numBolsas" title="Numero de Bolsas" width="150">
+        </kendo-grid-column> 
+        <kendo-grid-column field="fechaMovimiento" title="Fecha del Movimiento" width="150">
+        </kendo-grid-column> 
+        <kendo-grid-column field="fechaMovimiento" title="Fecha del Movimiento" width="150">
+        </kendo-grid-column>
+        <kendo-grid-column field="Turno" title="Turno" width="100">
+        </kendo-grid-column> 
+        <kendo-grid-column field="folioRemision" title="Folio de Remision" width="150">
+        </kendo-grid-column>
+      </kendo-grid>  
+      <button 
+      class="btn btn-primary"
+      (click)="OnClickObtenerMovimientos()">Obtener Movimientos</button>
       <form [formGroup]="formaAlmacen" (ngSubmit)="onSubmit()">
-        <div class="form-group" >
-          <label for="CodigoProducto">Codigo Poducto</label>
-          <input type="text"
-          id="codigoProducto"
-          class="form-control"
-          formControlName="codigoProducto">
-          <span 
-          *ngIf="!formaAlmacen.get('codigoProducto').valid && formaAlmacen.get('codigoProducto').touched"
-          class="help-block">Ingresa un codigo valido</span>
-        </div>
-        <div class="form-group">
-          <label for="nombreProducto">Nombre del producto</label>
-          <input type="text"
-          id="nombreProducto"
-          class="form-control"
-          formControlName="nombreProducto">
-          <span 
-          *ngIf="!formaAlmacen.get('nombreProducto').valid && formaAlmacen.get('nombreProducto').touched"
-          class="help-block">Ingresa un nombre valido</span>
-        </div>
+          <div class="form-group">
+              <label for="Cliente">Cliente</label>
+              <kendo-autocomplete 
+              id="cliente" 
+               name="cliente" 
+              [data]="lstClientes" 
+              [placeholder]="'Seleccione el cliente'" 
+              [valueField]="'razonSocial'" 
+              ngModel
+              aria-required="Introdusca el cliente"
+              formControlName="clientes">
+      </kendo-autocomplete>
+      <button class="btn btn-primary" (click)="OnClickObtenerClientes()">
+        Obtener Clientes
+      </button>
+            </div>
+            <div class="form-group">
+              <label for="Producto">Nombre Del producto</label>
+      <kendo-autocomplete 
+      id="nombreProducto" 
+      name="nombreProducto"
+      [data]="lstProductosCliente"
+      [placeholder]="'Seleccione el nombre del producto'" 
+      [valueField]="'nombreProducto'" 
+      ngModel
+      aria-required="Introdusca el nombreProducto del producto"
+      formControlName="nombreProducto">
+    </kendo-autocomplete>
+    <button class="btn btn-primary" 
+    (click)="OnClickObtenerProductos()">
+      Obtener Productos
+    </button>   
+            </div>
         <div class="form-group" *ngFor="let tipo of tiposMovimientos">
           <label for="tipoMovimiento">
             <input type="radio"

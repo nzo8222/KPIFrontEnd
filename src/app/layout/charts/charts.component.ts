@@ -29,6 +29,7 @@ export class ChartsComponent implements OnInit {
     onClickObtenerGrafica(){
         this.loadedChart = false;
         this.lineChartData = [];
+        this.barChartData = [];
         const idx = this.listaGridPedidosSemanal.findIndex(e => e.idPedidoSemanal === this.selectedKeys[0]);
         if (idx > -1) { this.idxSelectedItem = idx; }
         if (this.idxSelectedItem > -1) {
@@ -43,17 +44,25 @@ export class ChartsComponent implements OnInit {
                     data: c.cumplimientos,
                     label: c.nombreProducto
                 })
-            res.forEach(c => {
-                this.barChartData.push({
-                    data: c.cumplimientos,
-                    label: c.nombreProducto
-                })
-            })
             });
             // TODO: Preguntar qué va en eje X (ChartLabel)
             this.loadedChart = true;
         });
-
+        this.servicio.PostDatosGraficaBarrasCumplimientoProducto(solicitudGraficaCumplimiento).subscribe(
+            res => {
+                res.forEach(c => {
+                    this.barChartData.push({
+                        data: c.numBolsasEntregadas,
+                        label: "Bolsas Entregadas"
+                    })
+                    this.barChartData.push({
+                        data: c.numBolsasPedidoDiario,
+                        label: "Bolsas Pedidas"
+                    })
+                })
+            }
+        )
+        
         }
     }
     public lstClientes: clienteDTO[] = [];

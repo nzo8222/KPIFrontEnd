@@ -23,3 +23,13 @@ export interface ProductoDetalle {
     costoUnitario: number;
     total: number;
 }
+export interface MovimientoAlmacen {
+    idMovimientoAlmacen: string;
+    codigoProducto: number;
+    nombreProducto: string;
+    tipoMovimiento: string;
+    numBolsas: number;
+    fechaMovimiento: Date;
+    Turno: string;
+    folioRemision: number;
+}

@@ -133,15 +133,18 @@
         <kendo-grid-column field="fechaFin" title="Fecha Fin" width="150">
         </kendo-grid-column> 
       </kendo-grid>  
-      
+      <div class="form-group">
+          <div class="form-control">
+      <button 
+      class="btn btn-primary" 
+      (click)="onClickObtenerGrafica()"
+      [disabled]="!selectedKeys[0]">Generar Grafica</button>
+        </div>
     </div>
-</div>
-<div class="row">
+    </div>
+
+
     <div class="col-lg-10">
-        <button 
-        class="btn btn-primary" 
-        (click)="onClickObtenerGrafica()"
-        [disabled]="!selectedKeys[0]">Generar Grafica</button>
     <div *ngIf="loadedChart" class="col">
         <div class="card mb-3">
             <div class="card-header">
@@ -159,6 +162,19 @@
                 (chartHover)="chartHovered($event)" 
                 (chartClick)="chartClicked($event)">
                 </canvas>
+            </div>
+        </div>
+    </div>
+    <div *ngIf="loadedChart" class="col-lg-10">
+        <div class="card mb-3">
+            <div class="card-header">
+                Bar Chart
+            </div>
+            <div class="card-body">
+                <canvas baseChart [datasets]="barChartData" [labels]="barChartLabels" [options]="barChartOptions" [legend]="barChartLegend" [chartType]="barChartType" (chartHover)="chartHovered($event)" (chartClick)="chartClicked($event)">
+                </canvas>
+            </div>
+            <div class="card-footer">
             </div>
         </div>
     </div>

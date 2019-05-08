@@ -3,8 +3,8 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
-import { Producto } from '../interfaces/entities';
-import { productoCompaq, pedidoCliente, movimientoAlmacen, DatosGraficaCumplimiento, SolicitudGraficaCumplimiento } from '../interfaces/models';
+import { Producto, MovimientoAlmacen } from '../interfaces/entities';
+import { productoCompaq, pedidoCliente, movimientoAlmacen, DatosGraficaCumplimiento, SolicitudGraficaCumplimiento, DatosGraficaBarraCumplimiento } from '../interfaces/models';
 import { RespuestaServidor } from '../interfaces/response';
 import { pedidoClienteDTO, productoCompaqDTO, DatosInventarioFisicoDTO, productoPedidoKPI, clienteDTO, productoDTO, pedidoSemanalDTO, clienteDTOSinID, productoDTOConCliente, LoginDTO, RegistroUsuarioDTO, SolicitudGraficaCumplimientioDTO, PedidoSemanalGraficaDTO } from '../interfaces/DTOs';
 
@@ -83,6 +83,12 @@ export class FacadeService {
   constructor(http: HttpClient) {
     const urlService = environment.API_URL;
     this.request = new HttpRequestUtil(http, urlService);
+  }
+  public GetMovimientosAlmacen(): Observable<MovimientoAlmacen[]> {
+    return this.request.doGet<MovimientoAlmacen[]>(`MovimientoAlmacen/GetMovimientosAlmacen`);
+  }
+  public PostDatosGraficaBarrasCumplimientoProducto(solicitudGraficaCumplimiento: SolicitudGraficaCumplimiento): Observable<DatosGraficaBarraCumplimiento[]> {
+    return this.request.doPost<DatosGraficaBarraCumplimiento[]>(`PedidoCliente/GetGraficaBarrasCumplimiento`, solicitudGraficaCumplimiento);
   }
   public PostSolicitudPedidosSemanales(solicitud: SolicitudGraficaCumplimientioDTO): Observable<PedidoSemanalGraficaDTO[]>{
     return this.request.doPost<PedidoSemanalGraficaDTO[]>(`PedidoSemanal/GetPedidosSemanal`, solicitud);
