@@ -1,38 +1,38 @@
 <div class="row">
   <div class="col-lg-8">
-      <kendo-grid [data]="listaGridClientes" [height]="410" [pageSize]="gridState.take" [skip]="gridState.skip"
-      [sort]="gridState.sort" [pageable]="true" [sortable]="true" [selectable]="true"
+    <kendo-grid 
+    [data]="listaGridClientes"
+     [height]="410"
+      [sortable]="true"
+       [selectable]="true"
       [selectable]="{ checkboxOnly: false, mode: 'single' }"
-      (selectedKeysChange)="selectedKeysChange($event)"  
-      [kendoGridSelectBy]="'codigoProducto'"
-      [selectedKeys]="selectedKeys"> 
+       (selectedKeysChange)="selectedKeysChange($event)"
+      [kendoGridSelectBy]="'idCliente'" 
+      [selectedKeys]="selectedKeys">
       <kendo-grid-column field="idCliente" title="ID" width="150">
       </kendo-grid-column>
       <kendo-grid-column field="razonSocial" title="Nombre" width="250">
       </kendo-grid-column>
-    </kendo-grid> 
-    <button class="btn btn-primary"
-    (click)="obtenerClientes()">Obtener Clientes</button>
+    </kendo-grid>
+
+    <button class="btn btn-primary" (click)="obtenerClientes()" [disabled]="esperawe">Obtener Clientes</button>
     <form [formGroup]="formaCliente" (ngSubmit)="onSubmitFormaCliente()">
       <div class="form-group">
-          
-        <div class="form-group" >
+
+        <div class="form-group">
           <label for="NombreCliente">Razon Social Cliente</label>
-          <input type="text"
-          id="razonSocial"
-          class="form-control"
-          formControlName="razonSocial">
-          <span 
-          *ngIf="!formaCliente.get('razonSocial').valid && formaCliente.get('razonSocial').touched"
-          class="help-block">Ingresa una Razon Social Valida</span>
+          <input type="text" id="razonSocial" class="form-control" formControlName="razonSocial">
+          <span *ngIf="!formaCliente.get('razonSocial').valid && formaCliente.get('razonSocial').touched"
+            class="help-block">Ingresa una Razon Social Valida</span>
         </div>
-        <button class="btn btn-primary" 
-     type="submit"
-     [disabled]="!formaCliente.valid ">Agregar Cliente</button>
-       
-     </div>
+        <button class="btn btn-primary" type="submit" [disabled]="!formaCliente.valid ">Agregar Cliente</button>
+
+      </div>
     </form>
-     
-    
-   </div>
+    <button class="btn btn-success" (click)="OnClickEditCliente()" [disabled]="selectedKeys.length === 0 
+    || !formaCliente.get('razonSocial').valid
+    || !formaCliente.get('razonSocial').touched">Editar Cliente</button>
+    <button class="btn btn-danger" (click)="OnClickDeleteCliente()" [disabled]="selectedKeys.length === 0">Eliminar
+      Cliente</button>
+  </div>
 </div>

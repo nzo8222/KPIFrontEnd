@@ -12,14 +12,19 @@
           aria-required="Introdusca el cliente" 
           formControlName="clientes">
         </kendo-autocomplete>
-        <button class="btn btn-primary" (click)="OnClickObtenerClientes()">
+        <button class="btn btn-primary" 
+        (click)="OnClickObtenerClientes()"
+        [disabled]="esperawe">
           Obtener Clientes
         </button>
-        <kendo-grid [data]="listaGridProductos" [height]="410" [pageSize]="gridState.take" [skip]="gridState.skip"
-      [sort]="gridState.sort" [pageable]="true" [sortable]="true" [selectable]="true"
+        <kendo-grid 
+        [data]="listaGridProductos" 
+        [height]="410" 
+        [sortable]="true"
+        [selectable]="true"
       [selectable]="{ checkboxOnly: false, mode: 'single' }"
       (selectedKeysChange)="selectedKeysChange($event)"  
-      [kendoGridSelectBy]="'codigoProducto'"
+      [kendoGridSelectBy]="'idProducto'"
       [selectedKeys]="selectedKeys"> 
       <kendo-grid-column field="idProducto" title="ID" width="100">
       </kendo-grid-column>
@@ -42,7 +47,7 @@
             <div class="form-group" >
               <label for="codigo">Codigo de producto</label>
               <input type="text"
-              id="piezasMiercoles"
+              id="codigo"
               class="form-control"
               formControlName="codigo">
               <span 
@@ -56,9 +61,21 @@
            </form>
            <button class="btn btn-primary"
      (click)="OnClickObtenerProductosPorCliente()"
-     [disabled]="!formaProducto.get('clientes').valid">
+     [disabled]="!formaProducto.get('clientes').valid || esperawe"
+     >
         Obtener Productos
       </button>
+      <button 
+    class="btn btn-success" 
+    (click)="OnClickEditProducto()"
+    [disabled]="selectedKeys.length === 0 
+    || !formaProducto.get('codigo').valid
+    || !formaProducto.get('nombreProducto').valid
+    ">Editar Producto</button>
+    <button
+    class="btn btn-danger" 
+    (click)="OnClickDeleteProducto()"
+    [disabled]="selectedKeys.length === 0">Eliminar Producto</button>
      </div>
   </div>
   <!--  <button class="btn btn-primary" type="submit" [disabled]="!formaPedidos.valid">Agregar Pedido</button> -->

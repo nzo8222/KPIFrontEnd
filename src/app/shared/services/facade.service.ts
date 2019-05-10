@@ -3,10 +3,10 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
-import { Producto, MovimientoAlmacen } from '../interfaces/entities';
+import { Producto, MovimientoAlmacen, Cliente } from '../interfaces/entities';
 import { productoCompaq, pedidoCliente, movimientoAlmacen, DatosGraficaCumplimiento, SolicitudGraficaCumplimiento, DatosGraficaBarraCumplimiento } from '../interfaces/models';
 import { RespuestaServidor } from '../interfaces/response';
-import { pedidoClienteDTO, productoCompaqDTO, DatosInventarioFisicoDTO, productoPedidoKPI, clienteDTO, productoDTO, pedidoSemanalDTO, clienteDTOSinID, productoDTOConCliente, LoginDTO, RegistroUsuarioDTO, SolicitudGraficaCumplimientioDTO, PedidoSemanalGraficaDTO } from '../interfaces/DTOs';
+import { pedidoClienteDTO, productoCompaqDTO, DatosInventarioFisicoDTO, productoPedidoKPI, clienteDTO, productoDTO, pedidoSemanalDTO, clienteDTOSinID, productoDTOConCliente, LoginDTO, RegistroUsuarioDTO, SolicitudGraficaCumplimientioDTO, PedidoSemanalGraficaDTO, PedidosSemanalesGrid } from '../interfaces/DTOs';
 
 class HttpRequestUtil {
   constructor(private http: HttpClient, public urlService: string) {}
@@ -83,6 +83,21 @@ export class FacadeService {
   constructor(http: HttpClient) {
     const urlService = environment.API_URL;
     this.request = new HttpRequestUtil(http, urlService);
+  }
+  public GetPedidoSemanalPorCliente(idCliente: string): Observable<PedidosSemanalesGrid[]> {
+    return this.request.doGet<PedidosSemanalesGrid[]>(`PedidoSemanal/GetPedidoSemanalPorIdCliente/${idCliente}`);
+  }
+  public PutProducto(producto: productoDTO): Observable<RespuestaServidor>{
+    return this.request.doPost<RespuestaServidor>(`Producto/PutProducto`, producto);
+  }
+  public DeleteProducto(idProducto: string): Observable<RespuestaServidor>{
+    return this.request.doDelete<RespuestaServidor>(`Producto/DeleteProducto/${idProducto}` );
+  }
+  public DeleteCliente(idCliente: string): Observable<RespuestaServidor>{
+    return this.request.doDelete<RespuestaServidor>(`Cliente/DeleteCliente/${idCliente}` );
+  }
+  public PutCliente(cliente: Cliente): Observable<RespuestaServidor>{
+    return this.request.doPost<RespuestaServidor>(`Cliente/PutCliente`, cliente);
   }
   public GetMovimientosAlmacen(): Observable<MovimientoAlmacen[]> {
     return this.request.doGet<MovimientoAlmacen[]>(`MovimientoAlmacen/GetMovimientosAlmacen`);

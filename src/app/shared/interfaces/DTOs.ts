@@ -95,3 +95,31 @@ export interface SolicitudGraficaCumplimientioDTO {
     fechaInicio: Date;
     fechaFin: Date;
 }
+export interface PedidosSemanalesGrid {
+    idPedidoSemanal: string;
+    nombreProducto: string;
+    codigoProducto: number;
+    cliente: string;
+    numBolLunes:number;
+    numBolMartes:number;
+    numBolMiercoles:number;
+    numBolJueves:number;
+    numBolViernes:number;
+    numBolSabado:number;
+    numBolDomingo:number;
+    fechaInicio: Date;
+    fechaFin: Date;
+}
+export interface PedidoSemanalEdit {
+    idPedidoSemanal: string;
+    idProducto: string;
+    numBolLunes:number;
+    numBolMartes:number;
+    numBolMiercoles:number;
+    numBolJueves:number;
+    numBolViernes:number;
+    numBolSabado:number;
+    numBolDomingo:number;
+    fechaInicio: Date;
+    fechaFin: Date;
+}
