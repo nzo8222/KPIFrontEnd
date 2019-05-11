@@ -33,3 +33,12 @@ export interface MovimientoAlmacen {
     Turno: string;
     folioRemision: number;
 }
+export interface MovimientoAlmacenEdit {
+    idMovimientoAlmacen: string;
+    idProducto:string;
+    tipoMovimiento: string;
+    numBolsas: number;
+    fechaMovimiento: Date;
+    Turno: string;
+    folioRemision: number;
+}

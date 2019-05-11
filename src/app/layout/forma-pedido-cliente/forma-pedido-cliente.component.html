@@ -70,7 +70,7 @@
         <kendo-grid-column field="fechaFin" title="Fecha Fin" width="150">
         </kendo-grid-column>  
     </kendo-grid>  
-    <button class="btn btn-primary" (click)="OnClickObtenerPedidos()" [disabled]="esperawe">
+    <button class="btn btn-primary" (click)="OnClickObtenerPedidos()" [disabled]="!formaProducto.get('cliente').valid || esperawe">
       Obtener Pedidos
     </button>
     <div class="col-lg-8">
@@ -129,14 +129,19 @@
           <span *ngIf="!formaPedido.get('fechaFin').valid && formaPedido.get('fechaFin').touched"
             class="help-block">Ingresa una fecha valida</span>
         </div>
-        <button class="btn btn-primary" type="submit" [disabled]="!formaPedido.valid ">
+        <button class="btn btn-primary" type="submit" [disabled]="!formaPedido.valid || !formaProducto.valid">
           Agregar pedido</button>
       </form>
       <button class="btn btn-success"
       (click)="OnClickEditPedido()"
        [disabled]="selectedKeys.length === 0 
-      || !formaPedido.valid">
+      || !formaPedido.valid
+      || !formaProducto.valid">
           Editar pedido</button>
+          <button class="btn btn-danger"
+      (click)="OnClickDeletePedido()"
+       [disabled]="selectedKeys.length === 0">
+          Eliminar pedido</button>
     </div>
 
   </div>

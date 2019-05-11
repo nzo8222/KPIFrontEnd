@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { FacadeService } from 'src/app/shared/services/facade.service';
 import { clienteDTO, productoDTO } from 'src/app/shared/interfaces/DTOs';
-import { MovimientoAlmacen } from 'src/app/shared/interfaces/entities';
+import { MovimientoAlmacen, MovimientoAlmacenEdit } from 'src/app/shared/interfaces/entities';
 import { State } from '@progress/kendo-data-query';
 
 @Component({
@@ -21,11 +21,55 @@ export class EntradaAlmacenComponent implements OnInit {
   public idxSelectedItem: number;
   public selectedKeys: string[] = [];
   tiposMovimientos = ['Entrada', 'Salida'];
-  turnos = [ '1', '3' ];
+  turnos = ['1', '3'];
   public lstClientes: clienteDTO[];
   public lstProductosCliente: productoDTO[];
   constructor(private facadeService: FacadeService) { }
-  OnClickObtenerMovimientos(){
+
+  OnClickEditMovimiento() {
+    const idx = this.listaGridMovimientos.findIndex(e => e.idMovimientoAlmacen === this.selectedKeys[0]);
+
+    if (idx > -1) { this.idxSelectedItem = idx; }
+
+    // Actualiza los valores.
+    if (this.idxSelectedItem > -1) {
+      if (this.formaAlmacen.valid) 
+      {
+        var productoSeleccionado = this.lstProductosCliente.find(c => c.nombreProducto === this.formaAlmacen.value.nombreProducto);
+        let movimientoEdit: MovimientoAlmacenEdit = {
+          idMovimientoAlmacen: '',
+          idProducto: '',
+          Turno: '',
+          fechaMovimiento: new Date,
+          folioRemision: 0,
+          numBolsas: 0,
+          tipoMovimiento: ''
+        };
+        movimientoEdit.idMovimientoAlmacen = this.selectedKeys[0];
+        movimientoEdit.idProducto = productoSeleccionado.idProducto;
+        movimientoEdit.numBolsas = this.formaAlmacen.value.numeroBolsas;
+        movimientoEdit.tipoMovimiento = this.formaAlmacen.value.tipoMovimiento;
+        movimientoEdit.Turno = this.formaAlmacen.value.turno;
+        movimientoEdit.folioRemision = this.formaAlmacen.value.folioRemision;
+
+        this.facadeService.PutMovimientoAlmacen(movimientoEdit).subscribe(
+          res =>
+          {
+            if(res.exitoso)
+            {
+              console.log("Wii, funka la wea");
+              this.OnClickObtenerMovimientos();
+              this.formaAlmacen.reset();
+            }
+            else
+            {
+              console.log(`Tronó esta madre ${res.mensajeError}`);
+            }
+          });
+      }
+    }
+  }
+  OnClickObtenerMovimientos() {
     this.facadeService.GetMovimientosAlmacen().subscribe(
       res => {
         this.listaGridMovimientos = res;
@@ -49,51 +93,51 @@ export class EntradaAlmacenComponent implements OnInit {
     });
   }
   onSubmit() {
-      let movimientoAlmacen = {
-        // IdMovimientoAlmacen: null,
-        CodigoProducto: null,
-        NombreProducto: null,
-        TipoMovimiento: null,
-        NumBolsas: null,
-        FechaMovimiento: null,
-        Turno: null,
-        FolioRemision: null
+    let movimientoAlmacen = {
+      // IdMovimientoAlmacen: null,
+      CodigoProducto: null,
+      NombreProducto: null,
+      TipoMovimiento: null,
+      NumBolsas: null,
+      FechaMovimiento: null,
+      Turno: null,
+      FolioRemision: null
+    }
+    if (!this.lstProductosCliente) {
+      return;
+    }
+    var productoSeleccionado = this.lstProductosCliente.find(c => c.nombreProducto === this.formaAlmacen.value.nombreProducto);
+    movimientoAlmacen.CodigoProducto = productoSeleccionado.codigoProducto;
+    movimientoAlmacen.NombreProducto = productoSeleccionado.nombreProducto;
+    movimientoAlmacen.TipoMovimiento = this.formaAlmacen.value.tipoMovimiento;
+    movimientoAlmacen.NumBolsas = this.formaAlmacen.value.numeroBolsas;
+    movimientoAlmacen.Turno = this.formaAlmacen.value.turno;
+    if (this.formaAlmacen.value.tipoMovimiento === "Salida") {
+      movimientoAlmacen.FolioRemision = this.formaAlmacen.value.folioRemision;
+    }
+    this.facadeService.PostMovimientoAlmacen(movimientoAlmacen).subscribe(RespuestaServidor => {
+      if (RespuestaServidor.exitoso) { console.log("funka la wea") } else {
+        console.log(`Tronó esta madre ${RespuestaServidor.mensajeError}`);
       }
-      if(!this.lstProductosCliente){
-        return;
-      }
-      var productoSeleccionado = this.lstProductosCliente.find(c => c.nombreProducto === this.formaAlmacen.value.nombreProducto)
-      movimientoAlmacen.CodigoProducto = productoSeleccionado.codigoProducto;
-      movimientoAlmacen.NombreProducto = productoSeleccionado.nombreProducto;
-      movimientoAlmacen.TipoMovimiento = this.formaAlmacen.value.tipoMovimiento;
-      movimientoAlmacen.NumBolsas = this.formaAlmacen.value.numeroBolsas;
-      movimientoAlmacen.Turno = this.formaAlmacen.value.turno;
-      if(this.formaAlmacen.value.tipoMovimiento==="Salida"){
-        movimientoAlmacen.FolioRemision = this.formaAlmacen.value.folioRemision;
-      }
-      this.facadeService.PostMovimientoAlmacen(movimientoAlmacen).subscribe(RespuestaServidor => {
-        if(RespuestaServidor.exitoso) { console.log("funka la wea" )} else {
-          console.log(`Tronó esta madre ${RespuestaServidor.mensajeError}`);
-        }
-      });
-      this.formaAlmacen.controls['tipoMovimiento'].reset();
-      this.formaAlmacen.controls['numeroBolsas'].reset();
-      this.formaAlmacen.controls['turno'].reset();
-      this.formaAlmacen.controls['folioRemision'].reset();
-      //this.formaAlmacen.reset();
-  }
-  OnClickObtenerProductos(){
-    
-    //selectedItem = this.lstProductosContpaq.find(p => p.codigoProducto === codigoProducto);
-   let clienteSeleccionado = this.lstClientes.find(c => c.razonSocial === this.formaAlmacen.value.clientes)
-   this.facadeService.GetProductosPedido(clienteSeleccionado).subscribe(
-    res => {
-      this.lstProductosCliente = res;
     });
-   
+    this.formaAlmacen.controls['tipoMovimiento'].reset();
+    this.formaAlmacen.controls['numeroBolsas'].reset();
+    this.formaAlmacen.controls['turno'].reset();
+    this.formaAlmacen.controls['folioRemision'].reset();
+    //this.formaAlmacen.reset();
+  }
+  OnClickObtenerProductos() {
+
+    //selectedItem = this.lstProductosContpaq.find(p => p.codigoProducto === codigoProducto);
+    let clienteSeleccionado = this.lstClientes.find(c => c.razonSocial === this.formaAlmacen.value.clientes)
+    this.facadeService.GetProductosPedido(clienteSeleccionado).subscribe(
+      res => {
+        this.lstProductosCliente = res;
+      });
+
   }
 
-  OnClickObtenerClientes(){
+  OnClickObtenerClientes() {
     this.facadeService.GetClientesPedido().subscribe(
       res => {
         this.lstClientes = res;

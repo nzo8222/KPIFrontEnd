@@ -103,5 +103,11 @@
         <button class="btn btn-primary" type="submit"
         [disabled]="!formaAlmacen.valid">Guardar Movimiento</button>
       </form>
+      <button 
+    class="btn btn-success" 
+    (click)="OnClickEditMovimiento()"
+    [disabled]="selectedKeys.length === 0 
+    || !formaAlmacen.valid
+    ">Editar Producto</button>
     </div>
   </div>

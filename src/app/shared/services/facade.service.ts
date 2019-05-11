@@ -3,10 +3,10 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
-import { Producto, MovimientoAlmacen, Cliente } from '../interfaces/entities';
+import { Producto, MovimientoAlmacen, Cliente, MovimientoAlmacenEdit } from '../interfaces/entities';
 import { productoCompaq, pedidoCliente, movimientoAlmacen, DatosGraficaCumplimiento, SolicitudGraficaCumplimiento, DatosGraficaBarraCumplimiento } from '../interfaces/models';
 import { RespuestaServidor } from '../interfaces/response';
-import { pedidoClienteDTO, productoCompaqDTO, DatosInventarioFisicoDTO, productoPedidoKPI, clienteDTO, productoDTO, pedidoSemanalDTO, clienteDTOSinID, productoDTOConCliente, LoginDTO, RegistroUsuarioDTO, SolicitudGraficaCumplimientioDTO, PedidoSemanalGraficaDTO, PedidosSemanalesGrid } from '../interfaces/DTOs';
+import { pedidoClienteDTO, productoCompaqDTO, DatosInventarioFisicoDTO, productoPedidoKPI, clienteDTO, productoDTO, pedidoSemanalDTO, clienteDTOSinID, productoDTOConCliente, LoginDTO, RegistroUsuarioDTO, SolicitudGraficaCumplimientioDTO, PedidoSemanalGraficaDTO, PedidosSemanalesGrid, PedidoSemanalEdit } from '../interfaces/DTOs';
 
 class HttpRequestUtil {
   constructor(private http: HttpClient, public urlService: string) {}
@@ -83,6 +83,15 @@ export class FacadeService {
   constructor(http: HttpClient) {
     const urlService = environment.API_URL;
     this.request = new HttpRequestUtil(http, urlService);
+  } 
+  public PutMovimientoAlmacen(movimiento: MovimientoAlmacenEdit): Observable<RespuestaServidor>{
+    return this.request.doPost<RespuestaServidor>(`MovimientoAlmacen/PutMovimiento`, movimiento);
+  }
+  public DeletePedidoSemanal(idPedidoSemanal: string): Observable<RespuestaServidor> {
+    return this.request.doDelete<RespuestaServidor>(`PedidoSemanal/DeletePedidoSemanal/${idPedidoSemanal}`);
+  }
+  public PutPedidoSemanal(pedidoSemanalEdit: PedidoSemanalEdit): Observable<RespuestaServidor> {
+    return this.request.doPost<RespuestaServidor>(`PedidoSemanal/PutPedidoSemanal/`, pedidoSemanalEdit);
   }
   public GetPedidoSemanalPorCliente(idCliente: string): Observable<PedidosSemanalesGrid[]> {
     return this.request.doGet<PedidosSemanalesGrid[]>(`PedidoSemanal/GetPedidoSemanalPorIdCliente/${idCliente}`);

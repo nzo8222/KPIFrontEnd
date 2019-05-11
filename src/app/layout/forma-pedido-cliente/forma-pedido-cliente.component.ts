@@ -19,7 +19,33 @@ export class FormaPedidoClienteComponent implements OnInit {
   public lstProductosCliente: productoDTO[];
   constructor(private facadeService: FacadeService) { }
   public esperawe: boolean = false;
+  OnClickDeletePedido(){
+    const idx = this.listaGridPedidos.findIndex(e => e.idPedidoSemanal === this.selectedKeys[0]);
 
+    if (idx > -1) { this.idxSelectedItem = idx; }
+
+    let idPedidoSemanal: string = this.selectedKeys[0];
+    this.facadeService.DeletePedidoSemanal(idPedidoSemanal).subscribe(res => {
+      if (res.exitoso) 
+      { 
+        console.log("Wii, funka la wea");
+        this.OnClickObtenerPedidos();
+      } else {
+        console.log(`Tronó esta madre ${res.mensajeError}`);
+      }
+    });
+
+
+    this.esperawe = true;
+    this.formaProducto.disable();
+    this.selectedKeys = [];
+    let interval = setInterval(() => {
+      this.OnClickObtenerPedidos();
+      this.esperawe = false;
+      this.formaProducto.enable();
+      clearInterval(interval);
+    }, 2000)
+  }
   OnClickEditPedido() {
     const idx = this.listaGridPedidos.findIndex(e => e.idPedidoSemanal === this.selectedKeys[0]);
 
@@ -27,7 +53,7 @@ export class FormaPedidoClienteComponent implements OnInit {
 
     // Actualiza los valores.
     if (this.idxSelectedItem > -1) {
-      if (this.formaProducto.value.nombreProducto
+      if (this.formaProducto.value.producto
         && this.formaProducto.value.cliente
         && this.formaPedido.value.piezasLunes
         && this.formaPedido.value.piezasMartes
@@ -38,47 +64,58 @@ export class FormaPedidoClienteComponent implements OnInit {
         && this.formaPedido.value.piezasDomingo
         && this.formaPedido.value.fechaInicio
         && this.formaPedido.value.fechaFin) {
-        //   let producto = this.lstProductosCliente.find(c => c.nombreProducto === this.formaPedido.value.nombreProducto);
-        //   let editPedido: PedidoSemanalEdit = {
-        //     idPedidoSemanal: '',
-        //     idProducto: '',
-        //     numBolDomingo: 0,
-        //     numBolJueves: 0,
-        //     numBolLunes: 0,
-        //     numBolMartes: 0,
-        //     numBolMiercoles: 0,
-        //     numBolSabado: 0,
-        //     numBolViernes: 0,
-        //     fechaFin: new Date,
-        //     fechaInicio: new Date
-        //   }
-        //   editPedido.idProducto = producto.idProducto;
-        //   editPedido.idPedidoSemanal = this.selectedKeys[0];
-        //   editPedido.numBolLunes = 
-        // this.listaGridPedidos[this.idxSelectedItem].nombreProducto = this.formaProducto.value.nombreProducto;
-        // this.listaGridPedidos[this.idxSelectedItem].codigoProducto = this.formaProducto.value.codigo;
-        // let productoEdit = this.listaGridPedidos[this.idxSelectedItem] as PedidosSemanalesGrid;
-        // this.facadeService.PutProducto(productoEdit).subscribe(res => {
-        //   if (res.exitoso) { console.log("Wii, funka la wea") } else {
-        //     console.log(`Tronó esta madre ${res.mensajeError}`);
-        //     //this.myform.controls['comments'].reset()
-        //     this.formaProducto.controls['codigo'].reset();
-        //     this.formaProducto.controls['nombreProducto'].reset();
-        //     // this.formaProducto.reset();
-        //   }
-        // });
+          let producto = this.lstProductosCliente.find(c => c.nombreProducto === this.formaProducto.value.producto);
+          let editPedido: PedidoSemanalEdit = {
+            idPedidoSemanal: '',
+            idProducto: '',
+            numBolDomingo: 0,
+            numBolJueves: 0,
+            numBolLunes: 0,
+            numBolMartes: 0,
+            numBolMiercoles: 0,
+            numBolSabado: 0,
+            numBolViernes: 0,
+            fechaFin: new Date,
+            fechaInicio: new Date
+          }
+          editPedido.idProducto = producto.idProducto;
+          editPedido.idPedidoSemanal = this.selectedKeys[0];
+          editPedido.numBolLunes = this.formaPedido.value.piezasLunes;
+          editPedido.numBolMartes = this.formaPedido.value.piezasMartes;
+          editPedido.numBolMiercoles = this.formaPedido.value.piezasMiercoles;
+          editPedido.numBolJueves = this.formaPedido.value.piezasJueves;
+          editPedido.numBolViernes = this.formaPedido.value.piezasViernes;
+          editPedido.numBolSabado = this.formaPedido.value.piezasSabado;
+          editPedido.numBolDomingo = this.formaPedido.value.piezasDomingo;
+          
+        this.facadeService.PutPedidoSemanal(editPedido).subscribe(res => {
+          if (res.exitoso) 
+          { 
+            console.log("Wii, funka la wea");
+            this.OnClickObtenerPedidos();
+          } else {
+            console.log(`Tronó esta madre ${res.mensajeError}`);
+          }
+        });
       }
     } 
     else 
     {
       console.log('Debe Ingresar valores a la forma');
     }
+    this.esperawe = true;
     this.formaProducto.disable();
     this.selectedKeys = [];
     let interval = setInterval(() => {
       this.OnClickObtenerPedidos();
-      this.formaProducto.controls['codigo'].reset();
-      this.formaProducto.controls['nombreProducto'].reset();
+      this.formaPedido.controls['piezasLunes'].reset();
+      this.formaPedido.controls['piezasMartes'].reset();
+      this.formaPedido.controls['piezasMiercoles'].reset();
+      this.formaPedido.controls['piezasJueves'].reset();
+      this.formaPedido.controls['piezasViernes'].reset();
+      this.formaPedido.controls['piezasSabado'].reset();
+      this.formaPedido.controls['piezasDomingo'].reset();
+      this.esperawe = false;
       this.formaProducto.enable();
       clearInterval(interval);
     }, 2000)
@@ -250,9 +287,7 @@ export class FormaPedidoClienteComponent implements OnInit {
       'fechaFin': new FormControl(null, [Validators.required])
     });
   }
-  OnClickAgregarProducto() {
 
-  }
   OnClickObtenerProductos() {
 
     //selectedItem = this.lstProductosContpaq.find(p => p.codigoProducto === codigoProducto);
