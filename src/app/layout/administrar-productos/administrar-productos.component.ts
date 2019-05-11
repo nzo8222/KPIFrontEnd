@@ -42,7 +42,7 @@ export class AdministrarProductosComponent implements OnInit {
      let interval = setInterval( () => {
       this.esperawe = false;
       clearInterval(interval);
-    }, 2000)
+    }, 2000);
   }
   selectedKeysChange(value: any) {
 
@@ -57,7 +57,7 @@ export class AdministrarProductosComponent implements OnInit {
       let interval = setInterval( () => {
         this.esperawe = false;
         clearInterval(interval);
-      }, 2000)
+      }, 2000);
   }
   onSubmitFormaProducto(){
     let productoDTOConCliente: productoDTOConCliente = {
@@ -87,7 +87,7 @@ export class AdministrarProductosComponent implements OnInit {
       this.formaProducto.controls['nombreProducto'].reset();
       this.formaProducto.enable();
       clearInterval(interval);
-    }, 2000)
+    }, 2000);
   }
   OnClickDeleteProducto() {
     const idx = this.listaGridProductos.findIndex(e => e.idProducto === this.selectedKeys[0]);
@@ -113,7 +113,7 @@ export class AdministrarProductosComponent implements OnInit {
       this.formaProducto.controls['nombreProducto'].reset();
       this.formaProducto.enable();
       clearInterval(interval);
-    }, 2000)
+    }, 2000);
 
   }
   OnClickEditProducto() {
@@ -150,7 +150,7 @@ export class AdministrarProductosComponent implements OnInit {
       this.formaProducto.controls['nombreProducto'].reset();
       this.formaProducto.enable();
       clearInterval(interval);
-    }, 2000)
+    }, 2000);
 
   }
 }

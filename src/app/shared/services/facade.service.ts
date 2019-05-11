@@ -84,8 +84,11 @@ export class FacadeService {
     const urlService = environment.API_URL;
     this.request = new HttpRequestUtil(http, urlService);
   } 
+  public DeleteMovimientoAlmacen(idMovimientoAlmacen: string): Observable<RespuestaServidor>{
+    return this.request.doDelete<RespuestaServidor>(`MovimientoAlmacen/DeleteMovimientoAlmacen/${idMovimientoAlmacen}` );
+  }
   public PutMovimientoAlmacen(movimiento: MovimientoAlmacenEdit): Observable<RespuestaServidor>{
-    return this.request.doPost<RespuestaServidor>(`MovimientoAlmacen/PutMovimiento`, movimiento);
+    return this.request.doPost<RespuestaServidor>(`MovimientoAlmacen/PutMovimientoAlmacen`, movimiento);
   }
   public DeletePedidoSemanal(idPedidoSemanal: string): Observable<RespuestaServidor> {
     return this.request.doDelete<RespuestaServidor>(`PedidoSemanal/DeletePedidoSemanal/${idPedidoSemanal}`);

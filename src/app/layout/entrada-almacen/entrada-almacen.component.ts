@@ -13,6 +13,7 @@ import { State } from '@progress/kendo-data-query';
 export class EntradaAlmacenComponent implements OnInit {
   formaAlmacen: FormGroup;
   listaGridMovimientos: MovimientoAlmacen[] = [];
+  public esperawe: boolean = false;
   public gridState: State = {
     sort: [],
     skip: 0,
@@ -25,8 +26,42 @@ export class EntradaAlmacenComponent implements OnInit {
   public lstClientes: clienteDTO[];
   public lstProductosCliente: productoDTO[];
   constructor(private facadeService: FacadeService) { }
-
+  OnClickDeleteMovimiento(){
+    this.esperawe = true;
+    const idx = this.listaGridMovimientos.findIndex(e => e.idMovimientoAlmacen === this.selectedKeys[0]);
+    if (idx > -1) { this.idxSelectedItem = idx; }
+    if (this.idxSelectedItem > -1) {
+      this.facadeService.DeleteMovimientoAlmacen(this.selectedKeys[0]).subscribe(
+        res =>
+        {
+          if(res.exitoso)
+          {
+            console.log("Wii, funka la wea");
+            this.OnClickObtenerMovimientos();
+            this.formaAlmacen.reset();
+          }
+          else
+          {
+            console.log(`Tronó esta madre ${res.mensajeError}`);
+          }
+        }
+      );
+    }
+    this.formaAlmacen.disable();
+    this.selectedKeys = [];
+    let interval = setInterval( () => {
+      this.esperawe = false;
+      this.OnClickObtenerMovimientos();
+      this.formaAlmacen.controls['tipoMovimiento'].reset();
+      this.formaAlmacen.controls['numeroBolsas'].reset();
+      this.formaAlmacen.controls['turno'].reset();
+      this.formaAlmacen.controls['folioRemision'].reset();
+      this.formaAlmacen.enable();
+      clearInterval(interval);
+    }, 2000);
+  }
   OnClickEditMovimiento() {
+    this.esperawe = true;
     const idx = this.listaGridMovimientos.findIndex(e => e.idMovimientoAlmacen === this.selectedKeys[0]);
 
     if (idx > -1) { this.idxSelectedItem = idx; }
@@ -39,18 +74,31 @@ export class EntradaAlmacenComponent implements OnInit {
         let movimientoEdit: MovimientoAlmacenEdit = {
           idMovimientoAlmacen: '',
           idProducto: '',
-          Turno: '',
+          turno: '',
           fechaMovimiento: new Date,
           folioRemision: 0,
           numBolsas: 0,
           tipoMovimiento: ''
         };
-        movimientoEdit.idMovimientoAlmacen = this.selectedKeys[0];
-        movimientoEdit.idProducto = productoSeleccionado.idProducto;
+        if(this.selectedKeys[0]){
+          movimientoEdit.idMovimientoAlmacen = this.selectedKeys[0];
+        }
+        else{
+          return;
+        }
+        if(productoSeleccionado.idProducto){
+          movimientoEdit.idProducto = productoSeleccionado.idProducto;
+        }
+        else{
+          return;
+        }
         movimientoEdit.numBolsas = this.formaAlmacen.value.numeroBolsas;
         movimientoEdit.tipoMovimiento = this.formaAlmacen.value.tipoMovimiento;
-        movimientoEdit.Turno = this.formaAlmacen.value.turno;
-        movimientoEdit.folioRemision = this.formaAlmacen.value.folioRemision;
+        movimientoEdit.turno = this.formaAlmacen.value.turno;
+        if(this.formaAlmacen.value.folioRemision){
+          movimientoEdit.folioRemision = this.formaAlmacen.value.folioRemision;
+        }
+        
 
         this.facadeService.PutMovimientoAlmacen(movimientoEdit).subscribe(
           res =>
@@ -68,13 +116,32 @@ export class EntradaAlmacenComponent implements OnInit {
           });
       }
     }
+    this.formaAlmacen.disable();
+    this.selectedKeys = [];
+    let interval = setInterval( () => {
+      this.esperawe = false;
+      this.OnClickObtenerMovimientos();
+      this.formaAlmacen.controls['tipoMovimiento'].reset();
+      this.formaAlmacen.controls['numeroBolsas'].reset();
+      this.formaAlmacen.controls['turno'].reset();
+      this.formaAlmacen.controls['folioRemision'].reset();
+      this.formaAlmacen.enable();
+      clearInterval(interval);
+    }, 2000);
   }
+
   OnClickObtenerMovimientos() {
+    this.esperawe = true;
     this.facadeService.GetMovimientosAlmacen().subscribe(
       res => {
         this.listaGridMovimientos = res;
       }
     );
+    this.selectedKeys = [];
+    let interval = setInterval( () => {
+      this.esperawe = false;
+      clearInterval(interval);
+    }, 2000);
   }
   selectedKeysChange(value: any) {
 
@@ -120,28 +187,44 @@ export class EntradaAlmacenComponent implements OnInit {
         console.log(`Tronó esta madre ${RespuestaServidor.mensajeError}`);
       }
     });
-    this.formaAlmacen.controls['tipoMovimiento'].reset();
-    this.formaAlmacen.controls['numeroBolsas'].reset();
-    this.formaAlmacen.controls['turno'].reset();
-    this.formaAlmacen.controls['folioRemision'].reset();
+    this.formaAlmacen.disable();
+    this.selectedKeys = [];
+    let interval = setInterval( () => {
+      this.esperawe = false;
+      this.OnClickObtenerMovimientos();
+      this.formaAlmacen.controls['tipoMovimiento'].reset();
+      this.formaAlmacen.controls['numeroBolsas'].reset();
+      this.formaAlmacen.controls['turno'].reset();
+      this.formaAlmacen.controls['folioRemision'].reset();
+      this.formaAlmacen.enable();
+      clearInterval(interval);
+    }, 2000);
     //this.formaAlmacen.reset();
   }
   OnClickObtenerProductos() {
-
+    this.esperawe = true;
     //selectedItem = this.lstProductosContpaq.find(p => p.codigoProducto === codigoProducto);
     let clienteSeleccionado = this.lstClientes.find(c => c.razonSocial === this.formaAlmacen.value.clientes)
     this.facadeService.GetProductosPedido(clienteSeleccionado).subscribe(
       res => {
         this.lstProductosCliente = res;
       });
-
+      let interval = setInterval( () => {
+        this.esperawe = false;
+        clearInterval(interval);
+      }, 2000);
   }
 
   OnClickObtenerClientes() {
+    this.esperawe = true;
     this.facadeService.GetClientesPedido().subscribe(
       res => {
         this.lstClientes = res;
       });
+      let interval = setInterval( () => {
+        this.esperawe = false;
+        clearInterval(interval);
+      }, 2000);
   }
 
 }

@@ -30,15 +30,22 @@ export interface MovimientoAlmacen {
     tipoMovimiento: string;
     numBolsas: number;
     fechaMovimiento: Date;
-    Turno: string;
+    turno: string;
     folioRemision: number;
 }
 export interface MovimientoAlmacenEdit {
+    // public Guid IdMovimientoAlmacen { get; set; }
     idMovimientoAlmacen: string;
+        // public Guid IdProducto { get; set; }
     idProducto:string;
+       // public string TipoMovimiento { get; set; }
     tipoMovimiento: string;
+        // public int NumBolsas { get; set; }
     numBolsas: number;
+     // public DateTime FechaMovimiento { get; set; }
     fechaMovimiento: Date;
-    Turno: string;
+    // public string Turno { get; set; }
+    turno: string;
+      // public int FolioRemision { get; set; }
     folioRemision: number;
 }

@@ -21,14 +21,15 @@
         </kendo-grid-column> 
         <kendo-grid-column field="fechaMovimiento" title="Fecha del Movimiento" width="150">
         </kendo-grid-column> 
-        <kendo-grid-column field="Turno" title="Turno" width="100">
+        <kendo-grid-column field="turno" title="Turno" width="100">
         </kendo-grid-column> 
         <kendo-grid-column field="folioRemision" title="Folio de Remision" width="150">
         </kendo-grid-column>
       </kendo-grid>  
       <button 
       class="btn btn-primary"
-      (click)="OnClickObtenerMovimientos()">Obtener Movimientos</button>
+      (click)="OnClickObtenerMovimientos()"
+      [disabled]="esperawe">Obtener Movimientos</button>
       <form [formGroup]="formaAlmacen" (ngSubmit)="onSubmit()">
           <div class="form-group">
               <label for="Cliente">Cliente</label>
@@ -42,7 +43,9 @@
               aria-required="Introdusca el cliente"
               formControlName="clientes">
       </kendo-autocomplete>
-      <button class="btn btn-primary" (click)="OnClickObtenerClientes()">
+      <button class="btn btn-primary" 
+      (click)="OnClickObtenerClientes()"
+      [disabled]="esperawe">
         Obtener Clientes
       </button>
             </div>
@@ -59,7 +62,8 @@
       formControlName="nombreProducto">
     </kendo-autocomplete>
     <button class="btn btn-primary" 
-    (click)="OnClickObtenerProductos()">
+    (click)="OnClickObtenerProductos()"
+    [disabled]="esperawe || !formaAlmacen.get('clientes').valid">
       Obtener Productos
     </button>   
             </div>
@@ -108,6 +112,10 @@
     (click)="OnClickEditMovimiento()"
     [disabled]="selectedKeys.length === 0 
     || !formaAlmacen.valid
-    ">Editar Producto</button>
+    || esperawe">Editar Movimiento</button>
+    <button
+    class="btn btn-danger" 
+    (click)="OnClickDeleteMovimiento()"
+    [disabled]="selectedKeys.length === 0 || esperawe">Eliminar Movimiento</button>
     </div>
   </div>
