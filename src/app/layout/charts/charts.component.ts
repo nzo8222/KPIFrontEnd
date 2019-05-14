@@ -5,6 +5,7 @@ import { SolicitudGraficaCumplimiento } from 'src/app/shared/interfaces/models';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { clienteDTO, SolicitudGraficaCumplimientioDTO, PedidoSemanalGraficaDTO } from 'src/app/shared/interfaces/DTOs';
 import { State } from '@progress/kendo-data-query';
+import { NotificationService } from 'src/app/shared/services/notifications.service';
 
 @Component({
     selector: 'app-charts',
@@ -15,6 +16,7 @@ import { State } from '@progress/kendo-data-query';
 export class ChartsComponent implements OnInit {
     // bar chart
     formaGrafica: FormGroup;
+    public esperawe: boolean = false;
     public listaGridPedidosSemanal: PedidoSemanalGraficaDTO[] = [];
     public idxSelectedItem: number;
     public gridState: State = {
@@ -82,13 +84,31 @@ export class ChartsComponent implements OnInit {
         solicitud.fechaFin = this.formaGrafica.value.fechaFin;
         this.servicio.PostSolicitudPedidosSemanales(solicitud).subscribe(
             res => {
-            this.listaGridPedidosSemanal = res;
+                if(res.exitoso)
+                {
+                    this.notifications.showSuccess("Se cargo la lista de pedidos semanales correctamente.");
+                    const listaPedidosSemanales = res.payload as PedidoSemanalGraficaDTO[];
+                    this.listaGridPedidosSemanal = listaPedidosSemanales;
+                }else
+                {
+                    this.notifications.showError(res.mensajeError);
+                }
+            
           });
     }
     OnClickObtenerClientes(){
         this.servicio.GetClientesPedido().subscribe(
           res => {
-            this.lstClientes = res;
+
+            if(!res.exitoso) { 
+                this.notifications.showError(res.mensajeError);
+                return;
+            };
+
+            const pedidos = res.payload as clienteDTO[];
+            this.lstClientes = pedidos;
+            this.notifications.showSuccess('Se cargaron las listas');
+
           });
       }
     // CreationFlags
@@ -245,7 +265,7 @@ export class ChartsComponent implements OnInit {
          */
     }
 
-    constructor(private servicio: FacadeService) { }
+    constructor(private servicio: FacadeService, private notifications: NotificationService) { }
 
     ngOnInit() {
         this.formaGrafica = new FormGroup({ 

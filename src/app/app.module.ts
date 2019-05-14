@@ -15,6 +15,8 @@ import { GridModule } from '@progress/kendo-angular-grid';
 import { DateInputsModule } from '@progress/kendo-angular-dateinputs';
 import { FormsModule } from '@angular/forms';
 
+import { ToastrModule } from 'ngx-toastr';
+import { NotificationService } from './shared/services/notifications.service';
 
 
 
@@ -46,10 +48,11 @@ export const createTranslateLoader = (http: HttpClient) => {
         AppRoutingModule,
         DropDownsModule,
         GridModule,
-        DateInputsModule
+        DateInputsModule,
+        ToastrModule.forRoot()
     ],
     declarations: [AppComponent],
-    providers: [AuthGuard, FacadeService],
+    providers: [AuthGuard, FacadeService, NotificationService],
     bootstrap: [AppComponent]
 })
 export class AppModule {}

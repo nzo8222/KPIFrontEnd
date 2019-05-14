@@ -96,8 +96,8 @@ export class FacadeService {
   public PutPedidoSemanal(pedidoSemanalEdit: PedidoSemanalEdit): Observable<RespuestaServidor> {
     return this.request.doPost<RespuestaServidor>(`PedidoSemanal/PutPedidoSemanal/`, pedidoSemanalEdit);
   }
-  public GetPedidoSemanalPorCliente(idCliente: string): Observable<PedidosSemanalesGrid[]> {
-    return this.request.doGet<PedidosSemanalesGrid[]>(`PedidoSemanal/GetPedidoSemanalPorIdCliente/${idCliente}`);
+  public GetPedidoSemanalPorCliente(idCliente: string): Observable<RespuestaServidor> {
+    return this.request.doGet<RespuestaServidor>(`PedidoSemanal/GetPedidoSemanalPorIdCliente/${idCliente}`);
   }
   public PutProducto(producto: productoDTO): Observable<RespuestaServidor>{
     return this.request.doPost<RespuestaServidor>(`Producto/PutProducto`, producto);
@@ -111,14 +111,14 @@ export class FacadeService {
   public PutCliente(cliente: Cliente): Observable<RespuestaServidor>{
     return this.request.doPost<RespuestaServidor>(`Cliente/PutCliente`, cliente);
   }
-  public GetMovimientosAlmacen(): Observable<MovimientoAlmacen[]> {
-    return this.request.doGet<MovimientoAlmacen[]>(`MovimientoAlmacen/GetMovimientosAlmacen`);
+  public GetMovimientosAlmacen(): Observable<RespuestaServidor> {
+    return this.request.doGet<RespuestaServidor>(`MovimientoAlmacen/GetMovimientosAlmacen`);
   }
   public PostDatosGraficaBarrasCumplimientoProducto(solicitudGraficaCumplimiento: SolicitudGraficaCumplimiento): Observable<DatosGraficaBarraCumplimiento[]> {
     return this.request.doPost<DatosGraficaBarraCumplimiento[]>(`PedidoCliente/GetGraficaBarrasCumplimiento`, solicitudGraficaCumplimiento);
   }
-  public PostSolicitudPedidosSemanales(solicitud: SolicitudGraficaCumplimientioDTO): Observable<PedidoSemanalGraficaDTO[]>{
-    return this.request.doPost<PedidoSemanalGraficaDTO[]>(`PedidoSemanal/GetPedidosSemanal`, solicitud);
+  public PostSolicitudPedidosSemanales(solicitud: SolicitudGraficaCumplimientioDTO): Observable<RespuestaServidor>{
+    return this.request.doPost<RespuestaServidor>(`PedidoSemanal/GetPedidosSemanal`, solicitud);
   }
   public PostProducto(producto: productoDTOConCliente): Observable<RespuestaServidor>{
     return this.request.doPost<RespuestaServidor>(`Producto/PostProducto`, producto);
@@ -130,12 +130,12 @@ export class FacadeService {
     return this.request.doPost<RespuestaServidor>(`PedidoCliente`, pedidoSemanal);
   }
    // Get Productos del cliente especificado para el pedido
-   public GetProductosPedido(cliente: clienteDTO): Observable<productoDTO[]> {
-    return this.request.doGet<productoDTO[]>(`producto/${cliente.idCliente}`);
+   public GetProductosPedido(cliente: clienteDTO): Observable<RespuestaServidor> {
+    return this.request.doGet<RespuestaServidor>(`producto/${cliente.idCliente}`);
   }
    // Get Clientes para el pedido
-   public GetClientesPedido(): Observable<clienteDTO[]> {
-    return this.request.doGet<clienteDTO[]>(`PedidoCliente/GetClientesPedido`);
+   public GetClientesPedido(): Observable<RespuestaServidor> {
+    return this.request.doGet<RespuestaServidor>(`PedidoCliente/GetClientesPedido`);
   }
   //Post Inventario Fisico
   public PostInventarioFisico(inventarioFisico: DatosInventarioFisicoDTO): Observable<RespuestaServidor>{

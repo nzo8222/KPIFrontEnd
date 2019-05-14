@@ -14,7 +14,7 @@
           aria-required="Introdusca el codigo del producto">
         </kendo-autocomplete>
         <p>Escriba número de piezas</p>
-        <input type="number" id="cantidad" name="cantidad" ngModel required class="form-control">
+        <input  type="number" id="cantidad" name="cantidad" ngModel required class="form-control">
         <button class="btn btn-primary" type="submit" [disabled]="!formaProductos.valid">Agregar Producto</button>
 
         <button class="btn btn-primary" type="button" (click)="onProductoEdit()">Editar Producto</button>

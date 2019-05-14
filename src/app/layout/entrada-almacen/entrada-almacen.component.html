@@ -1,5 +1,5 @@
 <div class="row">
-    <div class="col-lg-8">
+    <div class="col">
         <kendo-grid
         [data]="listaGridMovimientos" 
         [height]="410" 
@@ -26,12 +26,14 @@
         <kendo-grid-column field="folioRemision" title="Folio de Remision" width="150">
         </kendo-grid-column>
       </kendo-grid>  
+      <div class="form-inline">
       <button 
       class="btn btn-primary"
       (click)="OnClickObtenerMovimientos()"
       [disabled]="esperawe">Obtener Movimientos</button>
+       </div>
       <form [formGroup]="formaAlmacen" (ngSubmit)="onSubmit()">
-          <div class="form-group">
+          <div class="form-inline">
               <label for="Cliente">Cliente</label>
               <kendo-autocomplete 
               id="cliente" 
@@ -49,7 +51,7 @@
         Obtener Clientes
       </button>
             </div>
-            <div class="form-group">
+            <div class="form-inline">
               <label for="Producto">Nombre Del producto</label>
       <kendo-autocomplete 
       id="nombreProducto" 
@@ -60,6 +62,9 @@
       ngModel
       aria-required="Introdusca el nombreProducto del producto"
       formControlName="nombreProducto">
+
+
+
     </kendo-autocomplete>
     <button class="btn btn-primary" 
     (click)="OnClickObtenerProductos()"
@@ -67,7 +72,7 @@
       Obtener Productos
     </button>   
             </div>
-        <div class="form-group" *ngFor="let tipo of tiposMovimientos">
+        <div class="form-inline" *ngFor="let tipo of tiposMovimientos">
           <label for="tipoMovimiento">
             <input type="radio"
             [value]="tipo"
@@ -75,14 +80,14 @@
             formControlName="tipoMovimiento">{{tipo}}
           </label>
         </div>
-        <div class="form-group" *ngIf="formaAlmacen.value.tipoMovimiento==='Salida'">
+        <div class="form-inline" *ngIf="formaAlmacen.value.tipoMovimiento==='Salida'">
           <label for="folioRemision">Folio Remision</label>
             <input type="text"
             id="folioRemision"
             formControlName="folioRemision">
           
         </div>
-        <div class="form-group">
+        <div class="form-inline">
           <label for="numeroBolsas">Número de Bolsas</label>
           <input type="text"
           id="numeroBolsas"
@@ -91,23 +96,23 @@
           *ngIf="!formaAlmacen.get('numeroBolsas').valid && formaAlmacen.get('numeroBolsas').touched"
           class="help-block">Ingresa un número valido</span>
         </div>
-        <!-- <div class="form-group">
+        <!-- <div class="form-inline">
           <label for="fechaMovimiento"></label>
         </div> -->
-        <div class="form-group" *ngFor="let turno of turnos">
-          <label for="turno">Turno {{turno}}
+        <div class="form-inline" *ngFor="let turno of turnos">
+          <label for="turno">Turno {{turno}} 
           <input type="radio"
           id="turno"
           [value]="turno"
           formControlName="turno"> </label>
         </div>
+        <div class="form-inline">
         <span 
         *ngIf="!formaAlmacen.valid && formaAlmacen.touched"
         class="help-block">Ingresa informacion valida</span>
         <button class="btn btn-primary" type="submit"
         [disabled]="!formaAlmacen.valid">Guardar Movimiento</button>
-      </form>
-      <button 
+        <button 
     class="btn btn-success" 
     (click)="OnClickEditMovimiento()"
     [disabled]="selectedKeys.length === 0 
@@ -117,5 +122,8 @@
     class="btn btn-danger" 
     (click)="OnClickDeleteMovimiento()"
     [disabled]="selectedKeys.length === 0 || esperawe">Eliminar Movimiento</button>
+      </div>
+      </form>
+      
     </div>
   </div>

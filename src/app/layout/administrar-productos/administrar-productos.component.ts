@@ -3,6 +3,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { FacadeService } from 'src/app/shared/services/facade.service';
 import { clienteDTO, productoDTO, productoDTOConCliente } from 'src/app/shared/interfaces/DTOs';
 import { State } from '@progress/kendo-data-query';
+import { NotificationService } from 'src/app/shared/services/notifications.service';
 
 @Component({
   selector: 'app-administrar-productos',
@@ -11,7 +12,7 @@ import { State } from '@progress/kendo-data-query';
 })
 export class AdministrarProductosComponent implements OnInit {
   formaProducto: FormGroup;
-  constructor(private facadeService: FacadeService) { }
+  constructor(private facadeService: FacadeService, private notifications: NotificationService) { }
   public lstClientes: clienteDTO[];
   public listaGridProductos: productoDTO[] = [];
   public esperawe: boolean = false;
@@ -37,7 +38,14 @@ export class AdministrarProductosComponent implements OnInit {
     
     this.facadeService.GetProductosPedido(selectedItem).subscribe(
      res => {
-       this.listaGridProductos = res;
+       if(!res.exitoso){
+        this.notifications.showError(res.mensajeError);
+        return;
+       }
+       const listaProductosGrid = res.payload as productoDTO[];
+
+       this.listaGridProductos = listaProductosGrid;
+       this.notifications.showSuccess('Se cargaron los productos');
      });
      let interval = setInterval( () => {
       this.esperawe = false;
@@ -51,7 +59,12 @@ export class AdministrarProductosComponent implements OnInit {
     this.esperawe = true;
     this.facadeService.GetClientesPedido().subscribe(
       res => {
-        this.lstClientes = res;
+
+        const cliente = res.payload as clienteDTO[];
+
+        this.lstClientes = cliente;
+
+        this.notifications.showSuccess('Se cargaron las listas');
       });
       this.selectedKeys = [];
       let interval = setInterval( () => {

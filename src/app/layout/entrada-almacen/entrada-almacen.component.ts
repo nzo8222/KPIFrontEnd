@@ -4,6 +4,7 @@ import { FacadeService } from 'src/app/shared/services/facade.service';
 import { clienteDTO, productoDTO } from 'src/app/shared/interfaces/DTOs';
 import { MovimientoAlmacen, MovimientoAlmacenEdit } from 'src/app/shared/interfaces/entities';
 import { State } from '@progress/kendo-data-query';
+import { NotificationService } from 'src/app/shared/services/notifications.service';
 
 @Component({
   selector: 'app-entrada-almacen',
@@ -25,7 +26,7 @@ export class EntradaAlmacenComponent implements OnInit {
   turnos = ['1', '3'];
   public lstClientes: clienteDTO[];
   public lstProductosCliente: productoDTO[];
-  constructor(private facadeService: FacadeService) { }
+  constructor(private facadeService: FacadeService, private notifications: NotificationService) { }
   OnClickDeleteMovimiento(){
     this.esperawe = true;
     const idx = this.listaGridMovimientos.findIndex(e => e.idMovimientoAlmacen === this.selectedKeys[0]);
@@ -36,13 +37,13 @@ export class EntradaAlmacenComponent implements OnInit {
         {
           if(res.exitoso)
           {
-            console.log("Wii, funka la wea");
+            this.notifications.showSuccess("Se eliminó el movimiento correctamente.")
             this.OnClickObtenerMovimientos();
             this.formaAlmacen.reset();
           }
           else
           {
-            console.log(`Tronó esta madre ${res.mensajeError}`);
+            this.notifications.showError(res.mensajeError);
           }
         }
       );
@@ -105,13 +106,13 @@ export class EntradaAlmacenComponent implements OnInit {
           {
             if(res.exitoso)
             {
-              console.log("Wii, funka la wea");
+              this.notifications.showSuccess("Se editó el movimiento almacen correctamente.")
               this.OnClickObtenerMovimientos();
               this.formaAlmacen.reset();
             }
             else
             {
-              console.log(`Tronó esta madre ${res.mensajeError}`);
+              this.notifications.showError(res.mensajeError);
             }
           });
       }
@@ -134,7 +135,16 @@ export class EntradaAlmacenComponent implements OnInit {
     this.esperawe = true;
     this.facadeService.GetMovimientosAlmacen().subscribe(
       res => {
-        this.listaGridMovimientos = res;
+        if(res.exitoso)
+        {
+          this.notifications.showSuccess("Se cargó la lista de movimientos almacen correctamente.");
+          const movimientosAlmacen = res.payload as MovimientoAlmacen[];
+          this.listaGridMovimientos = movimientosAlmacen;
+        }
+        else{
+          this.notifications.showError(res.mensajeError);
+        }
+       
       }
     );
     this.selectedKeys = [];
@@ -183,8 +193,11 @@ export class EntradaAlmacenComponent implements OnInit {
       movimientoAlmacen.FolioRemision = this.formaAlmacen.value.folioRemision;
     }
     this.facadeService.PostMovimientoAlmacen(movimientoAlmacen).subscribe(RespuestaServidor => {
-      if (RespuestaServidor.exitoso) { console.log("funka la wea") } else {
-        console.log(`Tronó esta madre ${RespuestaServidor.mensajeError}`);
+      if (RespuestaServidor.exitoso) 
+      { 
+        this.notifications.showSuccess("Se agrego el movimiento correctamente.");
+    } else {
+      this.notifications.showError(RespuestaServidor.mensajeError);
       }
     });
     this.formaAlmacen.disable();
@@ -204,10 +217,18 @@ export class EntradaAlmacenComponent implements OnInit {
   OnClickObtenerProductos() {
     this.esperawe = true;
     //selectedItem = this.lstProductosContpaq.find(p => p.codigoProducto === codigoProducto);
-    let clienteSeleccionado = this.lstClientes.find(c => c.razonSocial === this.formaAlmacen.value.clientes)
+    let clienteSeleccionado = this.lstClientes.find(c => c.razonSocial === this.formaAlmacen.value.clientes);
+    //clienteSeleccionado -- lstProductosCliente
     this.facadeService.GetProductosPedido(clienteSeleccionado).subscribe(
       res => {
-        this.lstProductosCliente = res;
+        if(!res.exitoso){
+         this.notifications.showError(res.mensajeError);
+         return;
+        }
+        const listaProductosGrid = res.payload as productoDTO[];
+ 
+        this.lstProductosCliente = listaProductosGrid;
+        this.notifications.showSuccess('Se cargaron los productos correctamente');
       });
       let interval = setInterval( () => {
         this.esperawe = false;
@@ -219,7 +240,13 @@ export class EntradaAlmacenComponent implements OnInit {
     this.esperawe = true;
     this.facadeService.GetClientesPedido().subscribe(
       res => {
-        this.lstClientes = res;
+        if(!res.exitoso){
+          this.notifications.showError(res.mensajeError);
+
+        }
+        const pedidos = res.payload as clienteDTO[];
+        this.lstClientes = pedidos;
+        this.notifications.showSuccess("Se cargó la lista de clientes correctamente.")
       });
       let interval = setInterval( () => {
         this.esperawe = false;

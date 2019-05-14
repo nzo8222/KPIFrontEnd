@@ -3,7 +3,8 @@ import { FacadeService } from 'src/app/shared/services/facade.service';
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 import { Cliente } from 'src/app/shared/interfaces/entities';
 import { State } from '@progress/kendo-data-query';
-import { clienteDTOSinID } from 'src/app/shared/interfaces/DTOs';
+import { clienteDTOSinID, clienteDTO } from 'src/app/shared/interfaces/DTOs';
+import { NotificationService } from 'src/app/shared/services/notifications.service';
 
 @Component({
   selector: 'app-agregar-clientes-productos',
@@ -21,7 +22,8 @@ export class AgregarClientesProductosComponent implements OnInit {
   public esperawe: boolean = false;
   public idxSelectedItem: number;
   public selectedKeys: string[] = [];
-  constructor(private facadeService: FacadeService) { }
+  constructor(private facadeService: FacadeService,
+    private notifications: NotificationService) { }
   //^[a-zA-Z0-9_.-]*$ ----- /^[\w\s]+$/ -------- ^[a-zA-Z\s]+$ --------^[a-zA-Z0-9\s]*$
   ngOnInit() {
     this.formaCliente = new FormGroup({
@@ -32,7 +34,19 @@ export class AgregarClientesProductosComponent implements OnInit {
     this.esperawe = true;
     this.facadeService.GetClientesPedido().subscribe(
       res => {
-        this.listaGridClientes = res;
+        if(!res.exitoso)
+        {
+          this.notifications.showError(res.mensajeError);
+        }
+        const pedidos = res.payload as clienteDTO[];
+
+        this.listaGridClientes = pedidos;
+        
+
+        // Muestra notificación
+        
+        this.notifications.showSuccess('Se cargaron las listas');
+
       });
       this.selectedKeys = [];
       let interval = setInterval( () => {
