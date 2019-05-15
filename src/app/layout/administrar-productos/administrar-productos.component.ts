@@ -24,16 +24,27 @@ export class AdministrarProductosComponent implements OnInit {
   };
   public selectedKeys: string[] = [];
   ngOnInit() {
+    this.loadClienteList();
     this.formaProducto = new FormGroup({ 
       'clientes': new FormControl(null, [Validators.required]),
       'nombreProducto': new FormControl(null, [Validators.required, Validators.pattern('^[a-zA-Z0-9_ ]*$'), Validators.minLength(5), Validators.maxLength(20)]),
-      'codigo': new FormControl(null, [Validators.required, Validators.pattern('^[0-9]*$'),Validators.minLength(4),Validators.maxLength(5)]),
+      'codigo': new FormControl(null, [Validators.required, Validators.pattern('^[0-9]*$'),Validators.minLength(4),Validators.maxLength(4)]),
     });
   }
   OnClickObtenerProductosPorCliente(){
-    this.esperawe = true;
+    if(!this.lstClientes)
+    {
+      this.notifications.showError("Seleccioné un cliente valido.");
+      return
+    }
+ 
     let nombreCliente = this.formaProducto.value.clientes;
     let selectedItem;
+    if(!this.lstClientes.find(c => c.razonSocial === this.formaProducto.value.clientes))
+    {
+      this.notifications.showError("Seleccioné un cliente valido.");
+      return
+    }
     selectedItem = this.lstClientes.find(c => c.razonSocial === nombreCliente);
     
     this.facadeService.GetProductosPedido(selectedItem).subscribe(
@@ -47,6 +58,7 @@ export class AdministrarProductosComponent implements OnInit {
        this.listaGridProductos = listaProductosGrid;
        this.notifications.showSuccess('Se cargaron los productos');
      });
+     this.esperawe = true;
      let interval = setInterval( () => {
       this.esperawe = false;
       clearInterval(interval);
@@ -55,11 +67,14 @@ export class AdministrarProductosComponent implements OnInit {
   selectedKeysChange(value: any) {
 
   }
-  OnClickObtenerClientes(){
-    this.esperawe = true;
+  loadClienteList(){
+
     this.facadeService.GetClientesPedido().subscribe(
       res => {
-
+        if(!res.exitoso){
+          this.notifications.showError(res.mensajeError);
+          return;
+        }
         const cliente = res.payload as clienteDTO[];
 
         this.lstClientes = cliente;
@@ -67,12 +82,17 @@ export class AdministrarProductosComponent implements OnInit {
         this.notifications.showSuccess('Se cargaron las listas');
       });
       this.selectedKeys = [];
+      this.esperawe = true;
       let interval = setInterval( () => {
         this.esperawe = false;
         clearInterval(interval);
       }, 2000);
   }
+  OnClickObtenerClientes(){
+   this.loadClienteList();
+  }
   onSubmitFormaProducto(){
+
     let productoDTOConCliente: productoDTOConCliente = {
       idProducto: '',
       codigoProducto: 0,
@@ -81,6 +101,16 @@ export class AdministrarProductosComponent implements OnInit {
     };
     let nombreCliente = this.formaProducto.value.clientes;
     let selectedItem;
+    if(!this.lstClientes)
+    {
+      this.notifications.showError("Seleccioné un cliente valido.");
+      return
+    }
+    if(!this.lstClientes.find(c => c.razonSocial === nombreCliente))
+    {
+      this.notifications.showError("Seleccioné un cliente valido.");
+      return
+    }
     selectedItem = this.lstClientes.find(c => c.razonSocial === nombreCliente);
     
     productoDTOConCliente.codigoProducto = this.formaProducto.value.codigo;
@@ -88,13 +118,20 @@ export class AdministrarProductosComponent implements OnInit {
     productoDTOConCliente.nombreProducto = this.formaProducto.value.nombreProducto;
 
     this.facadeService.PostProducto(productoDTOConCliente).subscribe(res => {
-      if (res.exitoso) { console.log("Wii, funka la wea") } else {
-        console.log(`Tronó esta madre ${res.mensajeError}`);
+      if (res.exitoso) 
+      {
+        this.notifications.showSuccess("Se agrego el producto correctamente.");
+        } 
+        else 
+        {
+          this.notifications.showError(res.mensajeError);
       }
     });
     this.formaProducto.disable();
     this.selectedKeys = [];
+    this.esperawe = true;
     let interval = setInterval( () => {
+      this.esperawe = false;
       this.OnClickObtenerProductosPorCliente();
       this.formaProducto.controls['codigo'].reset();
       this.formaProducto.controls['nombreProducto'].reset();
@@ -103,24 +140,34 @@ export class AdministrarProductosComponent implements OnInit {
     }, 2000);
   }
   OnClickDeleteProducto() {
+    this.esperawe = true;
+    if(!this.listaGridProductos){
+      this.notifications.showError("No hay productos en la tabla.");
+      return
+    }
     const idx = this.listaGridProductos.findIndex(e => e.idProducto === this.selectedKeys[0]);
+    if(!this.listaGridProductos.find(c => c.idProducto === this.selectedKeys[0]))
+    {
+      this.notifications.showError("No se encontro el producto seleccionado.");
+      return
+    }
     const producto = this.listaGridProductos.find(c => c.idProducto === this.selectedKeys[0]);
     if (idx > -1) {
       this.idxSelectedItem = idx;
       this.facadeService.DeleteProducto(producto.idProducto).subscribe(res => {
         if (res.exitoso) {
-          console.log("Wii, funka la wea")
-          //this.listaGridClientes.splice(this.idxSelectedItem, 1);
+          this.notifications.showSuccess("Se eliminó el producto correctamente.");
         } 
         else 
         {
-          console.log(`Tronó esta madre ${res.mensajeError}`);
+          this.notifications.showError(res.mensajeError);
         }
       });
     }
     this.formaProducto.disable();
     this.selectedKeys = [];
     let interval = setInterval( () => {
+      this.esperawe = false;
       this.OnClickObtenerProductosPorCliente();
       this.formaProducto.controls['codigo'].reset();
       this.formaProducto.controls['nombreProducto'].reset();
@@ -130,8 +177,19 @@ export class AdministrarProductosComponent implements OnInit {
 
   }
   OnClickEditProducto() {
+    
     //  const idx = this.listaGridProductos.findIndex(e => e.codigoProducto === this.selectedKeys[0]);
     // Obtiene el indice seleccionado.
+    if(!this.listaGridProductos)
+    {
+      this.notifications.showError("No hay productos en la tabla.");
+      return
+    }
+    if(!this.listaGridProductos.findIndex(e => e.idProducto === this.selectedKeys[0]))
+    {
+      this.notifications.showError("No se encontró el producto seleccionadó.");
+      return
+    }
     const idx = this.listaGridProductos.findIndex(e => e.idProducto === this.selectedKeys[0]);
 
     if (idx > -1) { this.idxSelectedItem = idx; }
@@ -143,21 +201,25 @@ export class AdministrarProductosComponent implements OnInit {
         this.listaGridProductos[this.idxSelectedItem].codigoProducto = this.formaProducto.value.codigo;
         let productoEdit = this.listaGridProductos[this.idxSelectedItem] as productoDTO;
         this.facadeService.PutProducto(productoEdit).subscribe(res => {
-          if (res.exitoso) { console.log("Wii, funka la wea") } else {
-            console.log(`Tronó esta madre ${res.mensajeError}`);
-            //this.myform.controls['comments'].reset()
-            this.formaProducto.controls['codigo'].reset();
-            this.formaProducto.controls['nombreProducto'].reset();
-            // this.formaProducto.reset();
+          if (res.exitoso) 
+          { 
+            this.notifications.showSuccess("Se editó el producto correctamente."); 
+          } 
+          else 
+          {
+            this.notifications.showError(res.mensajeError);
           }
         });
-      }
+      } else { this.notifications.showError("Ingrese un nombre y un codigo de producto."); return}
     } else {
-      console.log('Debe seleccionar un elemento');
+      this.notifications.showError("Debe seleccionar un producto.");
+      return
     }
     this.formaProducto.disable();
     this.selectedKeys = [];
+    this.esperawe = true;
     let interval = setInterval( () => {
+      this.esperawe = false;
       this.OnClickObtenerProductosPorCliente();
       this.formaProducto.controls['codigo'].reset();
       this.formaProducto.controls['nombreProducto'].reset();

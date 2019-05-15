@@ -28,7 +28,16 @@ export class EntradaAlmacenComponent implements OnInit {
   public lstProductosCliente: productoDTO[];
   constructor(private facadeService: FacadeService, private notifications: NotificationService) { }
   OnClickDeleteMovimiento(){
-    this.esperawe = true;
+    if(!this.listaGridMovimientos)
+    {
+      this.notifications.showError("Seleccioné un movimiento valido.");
+      return
+    }
+    if(!this.listaGridMovimientos.findIndex(e => e.idMovimientoAlmacen === this.selectedKeys[0]))
+    {
+      this.notifications.showError("Seleccioné un movimiento valido.");
+      return
+    }
     const idx = this.listaGridMovimientos.findIndex(e => e.idMovimientoAlmacen === this.selectedKeys[0]);
     if (idx > -1) { this.idxSelectedItem = idx; }
     if (this.idxSelectedItem > -1) {
@@ -50,6 +59,7 @@ export class EntradaAlmacenComponent implements OnInit {
     }
     this.formaAlmacen.disable();
     this.selectedKeys = [];
+    this.esperawe = true;
     let interval = setInterval( () => {
       this.esperawe = false;
       this.OnClickObtenerMovimientos();
@@ -62,7 +72,17 @@ export class EntradaAlmacenComponent implements OnInit {
     }, 2000);
   }
   OnClickEditMovimiento() {
-    this.esperawe = true;
+    if(!this.listaGridMovimientos)
+    {
+      this.notifications.showError("Seleccioné un movimiento valido.");
+      return
+    }
+    if(!this.listaGridMovimientos.findIndex(e => e.idMovimientoAlmacen === this.selectedKeys[0]))
+    {
+      this.notifications.showError("Seleccioné un movimiento valido.");
+      return
+    }
+    
     const idx = this.listaGridMovimientos.findIndex(e => e.idMovimientoAlmacen === this.selectedKeys[0]);
 
     if (idx > -1) { this.idxSelectedItem = idx; }
@@ -119,6 +139,7 @@ export class EntradaAlmacenComponent implements OnInit {
     }
     this.formaAlmacen.disable();
     this.selectedKeys = [];
+    this.esperawe = true;
     let interval = setInterval( () => {
       this.esperawe = false;
       this.OnClickObtenerMovimientos();
@@ -130,8 +151,7 @@ export class EntradaAlmacenComponent implements OnInit {
       clearInterval(interval);
     }, 2000);
   }
-
-  OnClickObtenerMovimientos() {
+  LoadListMovimientosAlmacen(){
     this.esperawe = true;
     this.facadeService.GetMovimientosAlmacen().subscribe(
       res => {
@@ -153,6 +173,9 @@ export class EntradaAlmacenComponent implements OnInit {
       clearInterval(interval);
     }, 2000);
   }
+  OnClickObtenerMovimientos() {
+    this.LoadListMovimientosAlmacen();
+  }
   selectedKeysChange(value: any) {
 
   }
@@ -168,6 +191,8 @@ export class EntradaAlmacenComponent implements OnInit {
       'turno': new FormControl('1', Validators.required),
       'folioRemision': new FormControl(null, Validators.pattern('^[0-9]*$'))
     });
+    this.LoadListMovimientosAlmacen();
+    this.LoadListClientes();
   }
   onSubmit() {
     let movimientoAlmacen = {
@@ -181,6 +206,12 @@ export class EntradaAlmacenComponent implements OnInit {
       FolioRemision: null
     }
     if (!this.lstProductosCliente) {
+      this.notifications.showError("Seleccioné un producto valido.");
+      return;
+    }
+    if(!this.lstProductosCliente.find(c => c.nombreProducto === this.formaAlmacen.value.nombreProducto))
+    {
+      this.notifications.showError("Seleccioné un producto valido.");
       return;
     }
     var productoSeleccionado = this.lstProductosCliente.find(c => c.nombreProducto === this.formaAlmacen.value.nombreProducto);
@@ -202,6 +233,7 @@ export class EntradaAlmacenComponent implements OnInit {
     });
     this.formaAlmacen.disable();
     this.selectedKeys = [];
+    this.esperawe = true;
     let interval = setInterval( () => {
       this.esperawe = false;
       this.OnClickObtenerMovimientos();
@@ -215,8 +247,18 @@ export class EntradaAlmacenComponent implements OnInit {
     //this.formaAlmacen.reset();
   }
   OnClickObtenerProductos() {
-    this.esperawe = true;
+    
     //selectedItem = this.lstProductosContpaq.find(p => p.codigoProducto === codigoProducto);
+    if(!this.lstClientes)
+    {
+      this.notifications.showError("Seleccioné un cliente valido.");
+      return
+    }
+    if(!this.lstClientes.find(c => c.razonSocial === this.formaAlmacen.value.clientes))
+    {
+      this.notifications.showError("Seleccioné un cliente valido.");
+      return
+    }
     let clienteSeleccionado = this.lstClientes.find(c => c.razonSocial === this.formaAlmacen.value.clientes);
     //clienteSeleccionado -- lstProductosCliente
     this.facadeService.GetProductosPedido(clienteSeleccionado).subscribe(
@@ -230,14 +272,14 @@ export class EntradaAlmacenComponent implements OnInit {
         this.lstProductosCliente = listaProductosGrid;
         this.notifications.showSuccess('Se cargaron los productos correctamente');
       });
+      this.esperawe = true;
       let interval = setInterval( () => {
         this.esperawe = false;
         clearInterval(interval);
       }, 2000);
   }
-
-  OnClickObtenerClientes() {
-    this.esperawe = true;
+  LoadListClientes(){
+    
     this.facadeService.GetClientesPedido().subscribe(
       res => {
         if(!res.exitoso){
@@ -248,10 +290,14 @@ export class EntradaAlmacenComponent implements OnInit {
         this.lstClientes = pedidos;
         this.notifications.showSuccess("Se cargó la lista de clientes correctamente.")
       });
+      this.esperawe = true;
       let interval = setInterval( () => {
         this.esperawe = false;
         clearInterval(interval);
       }, 2000);
+  }
+  OnClickObtenerClientes() {
+    this.LoadListClientes();
   }
 
 }

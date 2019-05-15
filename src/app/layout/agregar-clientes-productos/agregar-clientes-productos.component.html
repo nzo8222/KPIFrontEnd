@@ -1,5 +1,5 @@
 <div class="row">
-  <div class="col-lg-8">
+  <div class="col">
     <kendo-grid 
     [data]="listaGridClientes"
      [height]="410"
@@ -14,8 +14,9 @@
       <kendo-grid-column field="razonSocial" title="Nombre" width="250">
       </kendo-grid-column>
     </kendo-grid>
-
-    <button class="btn btn-primary" (click)="obtenerClientes()" [disabled]="esperawe">Obtener Clientes</button>
+    <!-- <div class="form-inline">
+        <button class="btn btn-primary" (click)="obtenerClientes()" [disabled]="esperawe">Obtener Clientes</button>
+    </div> -->
     <form [formGroup]="formaCliente" (ngSubmit)="onSubmitFormaCliente()">
       <div class="form-group">
 
@@ -25,14 +26,18 @@
           <span *ngIf="!formaCliente.get('razonSocial').valid && formaCliente.get('razonSocial').touched"
             class="help-block">Ingresa una Razon Social Valida</span>
         </div>
-        <button class="btn btn-primary" type="submit" [disabled]="!formaCliente.valid ">Agregar Cliente</button>
+        <div class="form-inline">
+            <button class="btn btn-primary" type="submit" [disabled]="!formaCliente.valid ">Agregar Cliente</button>
+            <button class="btn btn-success" (click)="OnClickEditCliente()" [disabled]="selectedKeys.length === 0 
+            || !formaCliente.get('razonSocial').valid
+            || !formaCliente.get('razonSocial').touched">Editar Cliente</button>
+            <button class="btn btn-danger" (click)="OnClickDeleteCliente()" [disabled]="selectedKeys.length === 0">Eliminar
+              Cliente</button>
+        </div>
 
       </div>
     </form>
-    <button class="btn btn-success" (click)="OnClickEditCliente()" [disabled]="selectedKeys.length === 0 
-    || !formaCliente.get('razonSocial').valid
-    || !formaCliente.get('razonSocial').touched">Editar Cliente</button>
-    <button class="btn btn-danger" (click)="OnClickDeleteCliente()" [disabled]="selectedKeys.length === 0">Eliminar
-      Cliente</button>
+    
+    
   </div>
 </div>

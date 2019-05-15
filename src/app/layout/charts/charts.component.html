@@ -76,9 +76,9 @@
                     [placeholder]="'Seleccione el cliente'" [valueField]="'razonSocial'" ngModel
                     aria-required="Introdusca el cliente" formControlName="clientes">
                 </kendo-autocomplete>
-                <button class="btn btn-primary" (click)="OnClickObtenerClientes()">
+                <!-- <button class="btn btn-primary" (click)="OnClickObtenerClientes()">
                     Obtener Clientes
-                </button>
+                </button> -->
             </div>
 
             <div class="form-group">
@@ -99,6 +99,7 @@
         </form>
     </div>
         <!-- Inicio Grid pedidos -->
+        <div class="container-fluid">
         <kendo-grid [data]="listaGridPedidosSemanal" [height]="410" [sortable]="true" [selectable]="true"
             [selectable]="{ checkboxOnly: false, mode: 'single' }" (selectedKeysChange)="selectedKeysChange($event)"
             [kendoGridSelectBy]="'idPedidoSemanal'" [selectedKeys]="selectedKeys">
@@ -115,7 +116,7 @@
             <kendo-grid-column field="fechaFin" title="Fecha Fin" width="150">
             </kendo-grid-column>
         </kendo-grid>
-
+         </div>
         <div class="form-inline">
             <button class="btn btn-primary" (click)="onClickObtenerGrafica()" [disabled]="!selectedKeys[0]">Generar
                 Grafica</button>

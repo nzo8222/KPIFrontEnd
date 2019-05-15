@@ -27,11 +27,15 @@ export class AgregarClientesProductosComponent implements OnInit {
   //^[a-zA-Z0-9_.-]*$ ----- /^[\w\s]+$/ -------- ^[a-zA-Z\s]+$ --------^[a-zA-Z0-9\s]*$
   ngOnInit() {
     this.formaCliente = new FormGroup({
-      'razonSocial': new FormControl(null, [Validators.required, Validators.pattern('^[a-zA-Z0-9_ ]*$'), Validators.minLength(5)]),
+      'razonSocial': new FormControl(null, 
+        [Validators.required, 
+        Validators.pattern('^[a-zA-Z0-9_ ]*$'), 
+        Validators.minLength(5),
+      Validators.maxLength(25)]),
     });
+    this.LoadListClientes();
   }
-  obtenerClientes() {
-    this.esperawe = true;
+  LoadListClientes(){
     this.facadeService.GetClientesPedido().subscribe(
       res => {
         if(!res.exitoso)
@@ -48,41 +52,70 @@ export class AgregarClientesProductosComponent implements OnInit {
         this.notifications.showSuccess('Se cargaron las listas');
 
       });
+      this.esperawe = true;
       this.selectedKeys = [];
       let interval = setInterval( () => {
         this.esperawe = false;
         clearInterval(interval);
-      }, 2000)
+      }, 2000);
   }
+  obtenerClientes() {
+    this.LoadListClientes();
+  }
+
   OnClickDeleteCliente() {
+
+    if(!this.listaGridClientes)
+    {
+      this.notifications.showError("Seleccioné un cliente valido.");
+      return
+    }
+    if(!this.listaGridClientes.findIndex(e => e.idCliente === this.selectedKeys[0]))
+    {
+      this.notifications.showError("Seleccioné un cliente valido.");
+      return
+    }
     const idx = this.listaGridClientes.findIndex(e => e.idCliente === this.selectedKeys[0]);
     const cliente = this.listaGridClientes.find(c => c.idCliente === this.selectedKeys[0]);
     if (idx > -1) {
       this.idxSelectedItem = idx;
       this.facadeService.DeleteCliente(cliente.idCliente).subscribe(res => {
         if (res.exitoso) {
-          console.log("Wii, funka la wea")
+          this.notifications.showSuccess("Se eliminó el cliente correctamente.");
           //this.listaGridClientes.splice(this.idxSelectedItem, 1);
         } 
         else 
         {
-          console.log(`Tronó esta madre ${res.mensajeError}`);
+          this.notifications.showError(res.mensajeError);
         }
       });
     }
     this.formaCliente.disable();
     this.selectedKeys = [];
+    this.esperawe = true;
     let interval = setInterval( () => {
+      this.esperawe = false;
       this.obtenerClientes();
       this.formaCliente.reset();
       this.formaCliente.enable();
       clearInterval(interval);
-    }, 2000)
+    }, 2000);
 
   }
   OnClickEditCliente() {
     //  const idx = this.listaGridProductos.findIndex(e => e.codigoProducto === this.selectedKeys[0]);
     // Obtiene el indice seleccionado.
+    this.esperawe = true;
+    if(!this.listaGridClientes)
+    {
+      this.notifications.showError("Seleccioné un cliente valido.");
+      return
+    }
+    if(!this.listaGridClientes.findIndex(e => e.idCliente === this.selectedKeys[0]))
+    {
+      this.notifications.showError("Seleccioné un cliente valido.");
+      return
+    }
     const idx = this.listaGridClientes.findIndex(e => e.idCliente === this.selectedKeys[0]);
 
     if (idx > -1) { this.idxSelectedItem = idx; }
@@ -93,8 +126,13 @@ export class AgregarClientesProductosComponent implements OnInit {
         this.listaGridClientes[this.idxSelectedItem].razonSocial = this.formaCliente.value.razonSocial;
         let clienteEdit = this.listaGridClientes[this.idxSelectedItem] as Cliente;
         this.facadeService.PutCliente(clienteEdit).subscribe(res => {
-          if (res.exitoso) { console.log("Wii, funka la wea") } else {
-            console.log(`Tronó esta madre ${res.mensajeError}`);
+          if (res.exitoso) 
+          { 
+        this.notifications.showSuccess("Se editó el cliente correctamente.");
+        } 
+        else 
+        {
+          this.notifications.showError(res.mensajeError);
             this.formaCliente.reset();
           }
         });
@@ -105,32 +143,45 @@ export class AgregarClientesProductosComponent implements OnInit {
     this.formaCliente.disable();
     this.selectedKeys = [];
     let interval = setInterval( () => {
+      this.esperawe = false;
       this.obtenerClientes();
       this.formaCliente.reset();
       this.formaCliente.enable();
       clearInterval(interval);
-    }, 2000)
+    }, 2000);
 
   }
   selectedKeysChange(value: any) {
 
   }
   onSubmitFormaCliente() {
+    this.esperawe = true;
     let cliente: clienteDTOSinID = { razonSocial: '' };
+    if(!this.formaCliente.value.razonSocial)
+    {
+      this.notifications.showError("Ingrese un nombre para el cliente.");
+      return
+    }
     cliente.razonSocial = this.formaCliente.value.razonSocial;
     this.facadeService.PostCliente(cliente).subscribe(res => {
-      if (res.exitoso) { console.log("Wii, funka la wea") } else {
-        console.log(`Tronó esta madre ${res.mensajeError}`);
+      if (res.exitoso) 
+      { 
+        this.notifications.showSuccess("Se agregó el cliente correctamente.");
+      } 
+      else 
+      {
+        this.notifications.showError(res.mensajeError);
       }
     });
     this.formaCliente.disable();
     this.selectedKeys = [];
     let interval = setInterval( () => {
+      this.esperawe = false;
       this.obtenerClientes();
       this.formaCliente.reset();
       this.formaCliente.enable();
       clearInterval(interval);
-    }, 2000)
+    }, 2000);
 
   }
 

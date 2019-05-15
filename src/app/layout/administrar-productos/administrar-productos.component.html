@@ -1,80 +1,61 @@
 <div class="row">
-    <div class="col-lg-8">
-        <form [formGroup]="formaProducto" (ngSubmit)="onSubmitFormaProducto()">
-            <label for="Cliente">Cliente</label>
-                <kendo-autocomplete  
-                id="clientes"  
-          name="clientes" 
-          [data]="lstClientes"
-          [placeholder]="'Seleccione el cliente'" 
-          [valueField]="'razonSocial'" 
-          ngModel
-          aria-required="Introdusca el cliente" 
-          formControlName="clientes">
-        </kendo-autocomplete>
-        <button class="btn btn-primary" 
-        (click)="OnClickObtenerClientes()"
-        [disabled]="esperawe">
-          Obtener Clientes
+  <div class="col">
+    <form [formGroup]="formaProducto" (ngSubmit)="onSubmitFormaProducto()">
+      <div class="form-inline">
+      <label for="Cliente">Cliente</label>
+      <kendo-autocomplete id="clientes" name="clientes" [data]="lstClientes" [placeholder]="'Seleccione el cliente'"
+        [valueField]="'razonSocial'" ngModel aria-required="Introdusca el cliente" formControlName="clientes">
+      </kendo-autocomplete>
+      <!-- <button class="btn btn-primary" (click)="OnClickObtenerClientes()" [disabled]="esperawe">
+        Obtener Clientes
+      </button> -->
+    </div>
+      <kendo-grid [data]="listaGridProductos" [height]="410" [sortable]="true" [selectable]="true"
+        [selectable]="{ checkboxOnly: false, mode: 'single' }" (selectedKeysChange)="selectedKeysChange($event)"
+        [kendoGridSelectBy]="'idProducto'" [selectedKeys]="selectedKeys">
+        <kendo-grid-column field="idProducto" title="ID" width="100">
+        </kendo-grid-column>
+        <kendo-grid-column field="nombreProducto" title="Nombre" width="150">
+        </kendo-grid-column>
+        <kendo-grid-column field="codigoProducto" title="Codigo" width="150">
+        </kendo-grid-column>
+      </kendo-grid>
+      <div class="form-inline">
+          <button class="btn btn-primary" (click)="OnClickObtenerProductosPorCliente()"
+          [disabled]="!formaProducto.get('clientes').valid || esperawe">
+          Obtener Productos
         </button>
-        <kendo-grid 
-        [data]="listaGridProductos" 
-        [height]="410" 
-        [sortable]="true"
-        [selectable]="true"
-      [selectable]="{ checkboxOnly: false, mode: 'single' }"
-      (selectedKeysChange)="selectedKeysChange($event)"  
-      [kendoGridSelectBy]="'idProducto'"
-      [selectedKeys]="selectedKeys"> 
-      <kendo-grid-column field="idProducto" title="ID" width="100">
-      </kendo-grid-column>
-      <kendo-grid-column field="nombreProducto" title="Nombre" width="150">
-      </kendo-grid-column>
-      <kendo-grid-column field="codigoProducto" title="Codigo" width="150">
-        </kendo-grid-column> 
-    </kendo-grid>  
-    
-            <div class="form-group" >
-              <label for="nombreProducto">Nombre del producto</label>
-              <input type="text"
-              id="nombreProducto"
-              class="form-control"
-              formControlName="nombreProducto">
-              <span 
-              *ngIf="!formaProducto.get('nombreProducto').valid && formaProducto.get('nombreProducto').touched"
-              class="help-block">Ingresa un nombre</span>
-            </div>
-            <div class="form-group" >
-              <label for="codigo">Codigo de producto</label>
-              <input type="text"
-              id="codigo"
-              class="form-control"
-              formControlName="codigo">
-              <span 
-              *ngIf="!formaProducto.get('codigo').valid && formaProducto.get('codigo').touched"
-              class="help-block">Ingresa un codigo valido</span>
-            </div>
-            
-            <button class="btn btn-primary" 
-         type="submit"
-         [disabled]="!formaProducto.valid">Agregar Producto</button>
-           </form>
-           <button class="btn btn-primary"
-     (click)="OnClickObtenerProductosPorCliente()"
-     [disabled]="!formaProducto.get('clientes').valid || esperawe">
-        Obtener Productos
-      </button>
-      <button 
-    class="btn btn-success" 
-    (click)="OnClickEditProducto()"
-    [disabled]="selectedKeys.length === 0 
-    || !formaProducto.get('codigo').valid
-    || !formaProducto.get('nombreProducto').valid
-    ">Editar Producto</button>
-    <button
-    class="btn btn-danger" 
-    (click)="OnClickDeleteProducto()"
-    [disabled]="selectedKeys.length === 0">Eliminar Producto</button>
-     </div>
+      </div>
+      <div class="form-group">
+        <label for="nombreProducto">Nombre del producto</label>
+        <input type="text" id="nombreProducto" class="form-control" formControlName="nombreProducto">
+        <span *ngIf="!formaProducto.get('nombreProducto').valid && formaProducto.get('nombreProducto').touched"
+          class="help-block">Ingresa un nombre</span>
+      </div>
+      <div class="form-group">
+        <label for="codigo">Codigo de producto</label>
+        <input type="text" id="codigo" class="form-control" formControlName="codigo">
+        <span *ngIf="!formaProducto.get('codigo').valid && formaProducto.get('codigo').touched"
+          class="help-block">Ingresa un codigo valido</span>
+      </div>
+      <div class="form-inline">
+        <button class="btn btn-primary" type="submit" [disabled]="!formaProducto.valid || esperawe">Agregar
+          Producto</button>
+       
+        <button class="btn btn-success" (click)="OnClickEditProducto()" 
+        [disabled]="selectedKeys.length === 0 
+        || !formaProducto.get('codigo').valid
+        || !formaProducto.get('nombreProducto').valid
+        || esperawe">Editar Producto</button>
+        <button class="btn btn-danger" (click)="OnClickDeleteProducto()"
+          [disabled]="selectedKeys.length === 0 || esperawe">Eliminar Producto</button>
+
+      </div>
+
+    </form>
+
+
+
   </div>
-  <!--  <button class="btn btn-primary" type="submit" [disabled]="!formaPedidos.valid">Agregar Pedido</button> -->
+</div>
+<!--  <button class="btn btn-primary" type="submit" [disabled]="!formaPedidos.valid">Agregar Pedido</button> -->

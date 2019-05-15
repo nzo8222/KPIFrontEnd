@@ -26,12 +26,12 @@
         <kendo-grid-column field="folioRemision" title="Folio de Remision" width="150">
         </kendo-grid-column>
       </kendo-grid>  
-      <div class="form-inline">
+      <!-- <div class="form-inline">
       <button 
       class="btn btn-primary"
       (click)="OnClickObtenerMovimientos()"
       [disabled]="esperawe">Obtener Movimientos</button>
-       </div>
+       </div> -->
       <form [formGroup]="formaAlmacen" (ngSubmit)="onSubmit()">
           <div class="form-inline">
               <label for="Cliente">Cliente</label>
@@ -45,11 +45,11 @@
               aria-required="Introdusca el cliente"
               formControlName="clientes">
       </kendo-autocomplete>
-      <button class="btn btn-primary" 
+      <!-- <button class="btn btn-primary" 
       (click)="OnClickObtenerClientes()"
       [disabled]="esperawe">
         Obtener Clientes
-      </button>
+      </button> -->
             </div>
             <div class="form-inline">
               <label for="Producto">Nombre Del producto</label>

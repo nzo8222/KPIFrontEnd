@@ -19,6 +19,7 @@ export class ChartsComponent implements OnInit {
     public esperawe: boolean = false;
     public listaGridPedidosSemanal: PedidoSemanalGraficaDTO[] = [];
     public idxSelectedItem: number;
+    public lstClientes: clienteDTO[] = [];
     public gridState: State = {
         sort: [],
         skip: 0,
@@ -32,6 +33,16 @@ export class ChartsComponent implements OnInit {
         this.loadedChart = false;
         this.lineChartData = [];
         this.barChartData = [];
+        if(!this.listaGridPedidosSemanal)
+        {
+            this.notifications.showError("Seleccioné un pedido valido.");
+            return
+        }
+        if(!this.listaGridPedidosSemanal.find(e => e.idPedidoSemanal === this.selectedKeys[0]))
+        {
+            this.notifications.showError("Seleccioné un pedido valido.");
+            return
+        }
         const idx = this.listaGridPedidosSemanal.findIndex(e => e.idPedidoSemanal === this.selectedKeys[0]);
         if (idx > -1) { this.idxSelectedItem = idx; }
         if (this.idxSelectedItem > -1) {
@@ -67,13 +78,20 @@ export class ChartsComponent implements OnInit {
         
         }
     }
-    public lstClientes: clienteDTO[] = [];
+
     onSubmitFormaGrafica(){
-        if(this.lstClientes.length > 0){
-            var clienteSeleccionado = this.lstClientes.find(c=>c.razonSocial===this.formaGrafica.value.clientes)
-        }else{
-            return;
+        if(!this.lstClientes)
+        {
+            this.notifications.showError("Seleccioné un cliente valido.");
+            return
         }
+        if(!this.lstClientes.find(c=> c.razonSocial===this.formaGrafica.value.clientes))
+        {
+            this.notifications.showError("Seleccioné un cliente valido.");
+            return
+        }
+
+        var clienteSeleccionado = this.lstClientes.find(c=>c.razonSocial===this.formaGrafica.value.clientes)
        
         let solicitud: SolicitudGraficaCumplimientioDTO = {fechaFin: new Date,
                                                            fechaInicio: new Date,
@@ -96,20 +114,23 @@ export class ChartsComponent implements OnInit {
             
           });
     }
-    OnClickObtenerClientes(){
+    loadListCliente(){
         this.servicio.GetClientesPedido().subscribe(
-          res => {
-
-            if(!res.exitoso) { 
-                this.notifications.showError(res.mensajeError);
-                return;
-            };
-
-            const pedidos = res.payload as clienteDTO[];
-            this.lstClientes = pedidos;
-            this.notifications.showSuccess('Se cargaron las listas');
-
-          });
+            res => {
+  
+              if(!res.exitoso) { 
+                  this.notifications.showError(res.mensajeError);
+                  return;
+              };
+  
+              const pedidos = res.payload as clienteDTO[];
+              this.lstClientes = pedidos;
+              this.notifications.showSuccess('Se cargaron la lista de clientes correctamente.');
+  
+            });
+    }
+    OnClickObtenerClientes(){
+        this.loadListCliente();
       }
     // CreationFlags
     public loadedChart: boolean;
@@ -284,6 +305,6 @@ export class ChartsComponent implements OnInit {
         this.lineChartLegend = true;
         this.lineChartType = 'line';
 
-       
+        this.loadListCliente();
     }
 }

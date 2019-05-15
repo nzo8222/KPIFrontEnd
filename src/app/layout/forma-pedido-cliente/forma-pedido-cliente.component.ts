@@ -23,8 +23,15 @@ export class FormaPedidoClienteComponent implements OnInit {
   constructor(private facadeService: FacadeService, private notifications: NotificationService) { }
   public esperawe: boolean = false;
   OnClickDeletePedido() {
-    const idx = this.listaGridPedidos.findIndex(e => e.idPedidoSemanal === this.selectedKeys[0]);
-
+    if(this.listaGridPedidos.findIndex(e => e.idPedidoSemanal === this.selectedKeys[0]))
+    {
+      var idx = this.listaGridPedidos.findIndex(e => e.idPedidoSemanal === this.selectedKeys[0]);
+    }
+    else
+    {
+      this.notifications.showError("Seleccioné un pedido valido");
+      return
+    }
     if (idx > -1) { this.idxSelectedItem = idx; }
 
     let idPedidoSemanal: string = this.selectedKeys[0];
@@ -49,7 +56,15 @@ export class FormaPedidoClienteComponent implements OnInit {
     }, 2000)
   }
   OnClickEditPedido() {
-    const idx = this.listaGridPedidos.findIndex(e => e.idPedidoSemanal === this.selectedKeys[0]);
+    if(this.listaGridPedidos.findIndex(e => e.idPedidoSemanal === this.selectedKeys[0]))
+    {
+      var idx = this.listaGridPedidos.findIndex(e => e.idPedidoSemanal === this.selectedKeys[0]);
+    }
+    else
+    {
+      this.notifications.showError("Seleccioné un pedido valido");
+      return
+    }
 
     if (idx > -1) { this.idxSelectedItem = idx; }
 
@@ -66,6 +81,11 @@ export class FormaPedidoClienteComponent implements OnInit {
         && this.formaPedido.value.piezasDomingo
         && this.formaPedido.value.fechaInicio
         && this.formaPedido.value.fechaFin) {
+          if(!this.lstProductosCliente)
+          {
+            this.notifications.showError("Seleccioné un cliente y producto valido");
+            return
+          }
         let producto = this.lstProductosCliente.find(c => c.nombreProducto === this.valorProducto);
         let editPedido: PedidoSemanalEdit = {
           idPedidoSemanal: '',
@@ -118,11 +138,19 @@ export class FormaPedidoClienteComponent implements OnInit {
       this.esperawe = false;
       // this.formaProducto.enable();
       clearInterval(interval);
-    }, 2000)
+    }, 2000);
   }
   OnClickObtenerPedidos() {
-
-    let selectedItem = this.lstClientes.find(c => c.razonSocial === this.valorCliente);
+    var selectedItem;
+    if(this.lstClientes.find(c => c.razonSocial === this.valorCliente))
+    {
+      selectedItem = this.lstClientes.find(c => c.razonSocial === this.valorCliente);
+    }
+    else
+    {
+      this.notifications.showError("Seleccione un cliente valido.");
+      return
+    }
 
     this.facadeService.GetPedidoSemanalPorCliente(selectedItem.idCliente).subscribe(
       res => {
@@ -150,9 +178,22 @@ export class FormaPedidoClienteComponent implements OnInit {
       pedidoDiarioDTO: pedidoDiario
     };
 
-    let nombreProducto = this.valorProducto;
-    let producto: productoDTO;
-    producto = this.lstProductosCliente.find(p => p.nombreProducto === nombreProducto)
+
+    var producto: productoDTO;
+    if(!this.lstProductosCliente){
+      this.notifications.showError("Seleccioné un producto valido.");
+      return
+    }
+    if(this.lstProductosCliente.find(p => p.nombreProducto === this.valorProducto))
+    {
+      producto = this.lstProductosCliente.find(p => p.nombreProducto === this.valorProducto);
+    }
+    else
+    {
+      this.notifications.showError("Seleccione un cliente valido.");
+      return
+    }
+ 
     let pedidoDiario0 = {
       producto: null,
       numBolsas: null,
@@ -281,29 +322,43 @@ export class FormaPedidoClienteComponent implements OnInit {
       }
     });
     this.formaPedido.reset();
+    this.esperawe = true;
+    let interval = setInterval(() => {
+      this.loadListClientes();
+      this.esperawe = false;
+      clearInterval(interval);
+    }, 2000);
   }
 
   ngOnInit() {
 
     this.formaPedido = new FormGroup({
-      'piezasLunes': new FormControl(null, [Validators.required, Validators.pattern('^[0-9]*$')]),
-      'piezasMartes': new FormControl(null, [Validators.required, Validators.pattern('^[0-9]*$')]),
-      'piezasMiercoles': new FormControl(null, [Validators.required, Validators.pattern('^[0-9]*$')]),
-      'piezasJueves': new FormControl(null, [Validators.required, Validators.pattern('^[0-9]*$')]),
-      'piezasViernes': new FormControl(null, [Validators.required, Validators.pattern('^[0-9]*$')]),
-      'piezasSabado': new FormControl(null, [Validators.required, Validators.pattern('^[0-9]*$')]),
-      'piezasDomingo': new FormControl(null, [Validators.required, Validators.pattern('^[0-9]*$')]),
+      'piezasLunes': new FormControl(null, [Validators.required, Validators.pattern('^[0-9]*$'), Validators.minLength(1), Validators.maxLength(6)]),
+      'piezasMartes': new FormControl(null, [Validators.required, Validators.pattern('^[0-9]*$'), Validators.minLength(1), Validators.maxLength(6)]),
+      'piezasMiercoles': new FormControl(null, [Validators.required, Validators.pattern('^[0-9]*$'), Validators.minLength(1), Validators.maxLength(6)]),
+      'piezasJueves': new FormControl(null, [Validators.required, Validators.pattern('^[0-9]*$'), Validators.minLength(1), Validators.maxLength(6)]),
+      'piezasViernes': new FormControl(null, [Validators.required, Validators.pattern('^[0-9]*$'), Validators.minLength(1), Validators.maxLength(6)]),
+      'piezasSabado': new FormControl(null, [Validators.required, Validators.pattern('^[0-9]*$'), Validators.minLength(1), Validators.maxLength(6)]),
+      'piezasDomingo': new FormControl(null, [Validators.required, Validators.pattern('^[0-9]*$'), Validators.minLength(1), Validators.maxLength(6)]),
       'fechaInicio': new FormControl(null, [Validators.required]),
       'fechaFin': new FormControl(null, [Validators.required])
     });
-
     this.loadListClientes();
+    
   }
 
   OnClickObtenerProductos() {
 
     //selectedItem = this.lstProductosContpaq.find(p => p.codigoProducto === codigoProducto);
-    let clienteSeleccionado = this.lstClientes.find(c => c.razonSocial === this.valorCliente)
+    if(this.lstClientes.find(c => c.razonSocial === this.valorCliente))
+    {
+      var clienteSeleccionado = this.lstClientes.find(c => c.razonSocial === this.valorCliente);
+    }
+    else
+    {
+      this.notifications.showError("Seleccioné un cliente valido.");
+      return
+    }
     this.facadeService.GetProductosPedido(clienteSeleccionado).subscribe(
       res => {
         if(!res.exitoso){
