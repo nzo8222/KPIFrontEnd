@@ -67,39 +67,64 @@
     </div>
 </div> -->
 <!-- Forma Pedido Semanal -->
-<div class="row">
-    <div class="col">
-        <form [formGroup]="formaGrafica" (ngSubmit)="onSubmitFormaGrafica()">
-            <div class="form-inline">
-                <label for="Cliente">Cliente</label>
-                <kendo-autocomplete id="clientes" name="clientes" [data]="lstClientes"
-                    [placeholder]="'Seleccione el cliente'" [valueField]="'razonSocial'" ngModel
-                    aria-required="Introdusca el cliente" formControlName="clientes">
-                </kendo-autocomplete>
-                <!-- <button class="btn btn-primary" (click)="OnClickObtenerClientes()">
-                    Obtener Clientes
-                </button> -->
+
+
+
+<form [formGroup]="formaGrafica" (ngSubmit)="onSubmitFormaGrafica()">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col">
+                <div class="form-inline">
+                    <label for="Cliente">Cliente</label>
+                    <kendo-autocomplete id="clientes" name="clientes" [data]="lstClientes"
+                        [placeholder]="'Seleccione el cliente'" [valueField]="'razonSocial'" ngModel
+                        aria-required="Introdusca el cliente" formControlName="clientes">
+                    </kendo-autocomplete>
+                    <!-- <button class="btn btn-primary" (click)="OnClickObtenerClientes()">
+                                            Obtener Clientes
+                                        </button> -->
+                </div>
+            </div>
+            <div class="col">
+                <div class="form-group">
+                    <label for="FechaInicio">Fecha inicio de semana</label>
+                    <input type="date" id="fechaInicio" class="form-control" formControlName="fechaInicio">
+                    <span *ngIf="!formaGrafica.get('fechaInicio').valid && formaGrafica.get('fechaInicio').touched"
+                        class="help-block">Ingresa una fecha valida</span>
+                </div>
             </div>
 
-            <div class="form-group">
-                <label for="FechaInicio">Fecha inicio de semana</label>
-                <input type="date" id="fechaInicio" class="form-control" formControlName="fechaInicio">
-                <span *ngIf="!formaGrafica.get('fechaInicio').valid && formaGrafica.get('fechaInicio').touched"
-                    class="help-block">Ingresa una fecha valida</span>
+            <div class="col">
+
+                <div class="form-group">
+                    <label for="FechaFin">Fecha fin de semana</label>
+                    <input type="date" id="fechaFin" class="form-control" formControlName="fechaFin">
+                    <span *ngIf="!formaGrafica.get('fechaFin').valid && formaGrafica.get('fechaFin').touched"
+                        class="help-block">Ingresa una fecha valida</span>
+                </div>
+
             </div>
-            <div class="form-group">
-                <label for="FechaFin">Fecha fin de semana</label>
-                <input type="date" id="fechaFin" class="form-control" formControlName="fechaFin">
-                <span *ngIf="!formaGrafica.get('fechaFin').valid && formaGrafica.get('fechaFin').touched"
-                    class="help-block">Ingresa una fecha valida</span>
+            <div class="col">
+                <div class="form-inline">
+                    <button class="btn btn-primary" type="submit" [disabled]="!formaGrafica.valid">Obtener
+                        Pedidos</button>
+                </div>
             </div>
-            <div class="form-inline">
-                <button class="btn btn-primary" type="submit" [disabled]="!formaGrafica.valid">Obtener Pedidos</button>
-            </div>
-        </form>
+        </div>
     </div>
-        <!-- Inicio Grid pedidos -->
-        <div class="container-fluid">
+    <!-- <div class="container-fluid">
+                <div class="row">
+                    <div class="col">
+                    
+                 </div>
+                </div>
+            </div> -->
+
+</form>
+
+<div class="row">
+    <!-- Inicio Grid pedidos -->
+    <div class="container-fluid">
         <kendo-grid [data]="listaGridPedidosSemanal" [height]="410" [sortable]="true" [selectable]="true"
             [selectable]="{ checkboxOnly: false, mode: 'single' }" (selectedKeysChange)="selectedKeysChange($event)"
             [kendoGridSelectBy]="'idPedidoSemanal'" [selectedKeys]="selectedKeys">
@@ -116,12 +141,13 @@
             <kendo-grid-column field="fechaFin" title="Fecha Fin" width="150">
             </kendo-grid-column>
         </kendo-grid>
-         </div>
+    </div>
+    <div class="container-fluid">
         <div class="form-inline">
             <button class="btn btn-primary" (click)="onClickObtenerGrafica()" [disabled]="!selectedKeys[0]">Generar
-                Grafica</button>
+                Gráfica</button>
         </div>
-
+    </div>
 
 
     <!-- Inicio Graficas -->
@@ -129,7 +155,7 @@
         <div *ngIf="loadedChart" class="col">
             <div class="card mb-3">
                 <div class="card-header">
-                    Line Chart
+                    Gráfica de linea
                 </div>
                 <div class="card-body">
                     <canvas baseChart height="130" [datasets]="lineChartData" [labels]="lineChartLabels"
@@ -143,7 +169,7 @@
         <div *ngIf="loadedChart" class="col">
             <div class="card mb-3">
                 <div class="card-header">
-                    Bar Chart
+                    Gráfica de barras
                 </div>
                 <div class="card-body">
                     <canvas baseChart [datasets]="barChartData" [labels]="barChartLabels" [options]="barChartOptions"
